@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { ref, set } from "firebase/database";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth2 } from "./firebase";
+import { firebaseRealtime } from "./firebase";
 
 import { useNavigate } from "react-router-dom";
 
-import "./registerPage.module.css";
+import styles from "./registerPage.module.css";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -21,7 +23,27 @@ const RegisterPage = () => {
     e.preventDefault();
 
     try {
-      await createUserWithEmailAndPassword(auth2, email, password);
+      await createUserWithEmailAndPassword(auth2, email, password).then(
+        (userData) => {
+          const data = {
+            userId: userData.user.uid,
+            isAdmin: false,
+            allocatedDiskSpace: 1024,
+            diskSpaceUsed: 0,
+          };
+
+          const userId = userData.user.uid; // pobranie identyfikatora zarejestrowanego uzytkownika
+          const userRef = ref(firebaseRealtime, `/users/${userId}`); // pobranie referencji do ścieżki w firebase
+
+          set(userRef, data)
+            .then(() => {
+              console.log("Dane zostały zapisane");
+            })
+            .catch((err) => {
+              console.log("błąd podczas zapisu danych");
+            });
+        }
+      );
       console.log("Rejestracja powiodła się");
       setRegisterResult("success");
     } catch (error) {
@@ -31,28 +53,29 @@ const RegisterPage = () => {
   };
 
   return (
-    <div>
-      <div>This is register Page!!!!</div>
-      <form className="registerComponent" onSubmit={handleSubmit}>
-        <p className="inputText">WPISZ LOGIN:</p>
+    <div className={styles.registerContainer}>
+      <form className={styles.registerComponent} onSubmit={handleSubmit}>
+        <p className={styles.inputText}>WPISZ LOGIN:</p>
         <input
-          className="input-login"
+          className={styles.inputLogin}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <p className="inputText">WPISZ HASŁO:</p>
+        <p className={styles.inputText}>WPISZ HASŁO:</p>
         <input
-          className="input-login"
+          className={styles.inputLogin}
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="btn-register" type="submit">
+        <button className={styles.btnRegister} type="submit">
           Zarejestruj się
         </button>
       </form>
-      <button onClick={goBackHandler}>Wróć do logowania</button>
+      <button onClick={goBackHandler} className={styles.btnRegister}>
+        Wróć do logowania
+      </button>
     </div>
   );
 };

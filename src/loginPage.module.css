@@ -1,4 +1,4 @@
-.form-login {
+.formLogin {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,7 +10,7 @@
   font-size: 14px;
 }
 
-.input-login {
+.inputLogin {
   margin: 10px 0;
   padding: 10px;
   border: 1px solid gray;
@@ -19,7 +19,7 @@
   font-size: 16px;
 }
 
-.btn-login {
+.btnLogin {
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #007bff;
@@ -30,7 +30,7 @@
   font-size: 16px;
 }
 
-.btn-login:hover {
+.btnLogin:hover {
   background-color: #0069d9;
 }
 
@@ -70,6 +70,19 @@
   margin-bottom: 10px;
   color: #444;
 }
+.registerInfo {
+  margin-top: 10px;
+  font-family: "Roboto-M";
+  font-size: 14px;
+}
+
+.goToRegisterPage {
+  font-family: "Roboto-M";
+  color: #0069d9;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 5px;
+}
 
 .close {
   font-size: 28px;
@@ -91,7 +104,7 @@
   line-height: 1.5;
 }
 
-.text_info {
+.textInfo {
   margin-top: 20px;
   text-transform: uppercase;
   display: flex;
@@ -104,7 +117,7 @@
   border-radius: 10px;
 }
 
-.login-container {
+.loginContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
