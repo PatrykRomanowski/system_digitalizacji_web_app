@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ref, set } from "firebase/database";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth2 } from "./firebase";
@@ -11,7 +11,7 @@ import styles from "./registerPage.module.css";
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [registerResult, setRegisterResult] = useState(null);
+  // const [registerResult, setRegisterResult] = useState(null);
 
   const navigate = useNavigate();
 
@@ -44,11 +44,12 @@ const RegisterPage = () => {
             });
         }
       );
+
       console.log("Rejestracja powiodła się");
-      setRegisterResult("success");
+      // setRegisterResult("success");
     } catch (error) {
       console.log("Rejestracja nie powiodła się.", error);
-      setRegisterResult("failure");
+      // setRegisterResult("failure");
     }
   };
 

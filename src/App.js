@@ -5,8 +5,10 @@ import "./App.css";
 import StartPage from "./startPage";
 import LoginPage from "./loginPage";
 import RegisterPage from "./registerPage";
-import UserPanel from "./userPanel";
-import AdminPanel from "./adminPanel";
+import MainPageUser from "./userComponents/mainPageUser";
+import LogoutUser from "./userComponents/logoutUser";
+import MainPageAdmin from "./adminComponents/mainPageAdmin";
+import LogoutAdmin from "./adminComponents/logoutAdmin";
 
 function App() {
   return (
@@ -16,8 +18,10 @@ function App() {
           <Route exact path="/" element={<StartPage />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/register" element={<RegisterPage />}></Route>
-          <Route path="/adminPanel" element={<AdminPanel />}></Route>
-          <Route path="/userPanel" element={<UserPanel />}></Route>
+          <Route path="/adminPanel" element={<MainPageAdmin />}></Route>
+          <Route path="/userPanel" element={<MainPageUser />}></Route>
+          <Route path="/logoutUser" element={<LogoutUser />}></Route>
+          <Route path="/logoutAdmin" element={<LogoutAdmin />}></Route>
         </Routes>
       </div>
     </Router>

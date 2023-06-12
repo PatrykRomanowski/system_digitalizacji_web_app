@@ -1,0 +1,50 @@
+@import "../variables.css";
+
+.headerContainer {
+  display: flex;
+  width: 100vw;
+  height: 7vh;
+  background-color: antiquewhite;
+  font-family: "Changa One-italic";
+  background-color: var(--gray1);
+  color: white;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navButton {
+  font-family: "Changa One";
+  color: var(--gray3);
+  background-color: transparent;
+  border: none;
+  height: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 0px 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.logoutButton {
+  font-family: "Changa One";
+  background-color: transparent;
+  color: var(--gray3);
+  border: none;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.headerText {
+  font-size: 26px;
+  margin-left: 15px;
+}
+
+.navButton:hover {
+  color: var(--gray4);
+}
+
+.logoutButton:hover {
+  color: var(--gray4);
+}
