@@ -15,6 +15,13 @@ body {
 }
 
 @font-face {
+  font-family: "Changa One-italic";
+  src: url("fonts/ChangaOne-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "Roboto";
   src: url("fonts/Roboto-Regular.ttf") format("truetype");
   font-weight: normal;
