@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { ref, get, child } from "firebase/database";
+import { useDispatch } from "react-redux";
+
 import { auth2 } from "./firebase";
 import { firebaseRealtime } from "./firebase";
+
+import { userActions } from "./storage/user-context";
 
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +18,7 @@ const LoginPage = () => {
   // const [loginResult, setLoginResult] = useState(null);
   // const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const goBackHandler = () => {
     navigate("/");
@@ -30,6 +35,8 @@ const LoginPage = () => {
         (userInfo) => {
           const userId = userInfo.user.uid;
           console.log(userId);
+
+          dispatch(userActions.login({ userEmail: email, userId: userId }));
 
           const userRef = ref(firebaseRealtime, `/users/${userId}`);
 

@@ -1,10 +1,21 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { useSelector } from "react-redux";
 import { myStorage } from "../firebase";
 import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
 
+import styles from "./addFileComponent.module.css";
+
 const AddFileComponent = () => {
   const [files, setFiles] = useState([]);
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const activeIdUser = useSelector((state) => state.userStatus.userId);
+  const activeUserEmail = useSelector((state) => state.userStatus.userEmail);
+
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     acceptedFiles.forEach((file) => {
@@ -36,7 +47,7 @@ const AddFileComponent = () => {
 
   const uploadFiles = () => {
     files.forEach((file) => {
-      const childRef = ref(myStorage, "users/xd");
+      const childRef = ref(myStorage, `users/${activeIdUser}/${file.name}`);
 
       uploadBytes(childRef, file)
         .then(() => {
@@ -55,7 +66,21 @@ const AddFileComponent = () => {
   };
 
   return (
-    <div>
+    <div className={styles.addFileContainer}>
+      <div className={styles.selectDocumentType}>
+        <p className={styles.inputDocumentTypeDescription}>Wybierz kategorię</p>
+        <select
+          className="inputStyle"
+          value={selectedOption}
+          onChange={handleOptionChange}
+        >
+          <option value="">Wybierz...</option>
+          <option value="books">KSIĄŻKI</option>
+          <option value="docs">DOKUMENTY</option>
+          <option value="paragons">PARAGONY</option>
+        </select>
+      </div>
+
       <div
         {...getRootProps()}
         className={`dropzone ${isDragActive ? "active" : ""}`}
@@ -90,8 +115,8 @@ const AddFileComponent = () => {
           ))}
         </ul>
       </div>
-      <button className="addPhotoButton" onClick={uploadFiles}>
-        Wyślij
+      <button className={styles.uploadFileButton} onClick={uploadFiles}>
+        Wyslij
       </button>
     </div>
   );
