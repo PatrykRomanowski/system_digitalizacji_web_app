@@ -7,27 +7,14 @@ import ShowUserSettingsComponent from "./showUserSettingsComponent";
 
 import styles from "./mainPageUser.module.css";
 
+import SettingUserComponent from "./settingUserComponent";
+import ShowFileComponent from "./showFileComponent";
+import AddFileComponent from "./addFileComponent";
+
 const MainPageUser = () => {
-  const [actualPage, setActualPage] = useState("addFile");
-
-  const onNavClick = (data) => {
-    setActualPage(data);
-  };
-
-  let renderedComponent;
-
-  if (actualPage === "showFile") {
-    renderedComponent = <ShowFileComponent />;
-  } else if (actualPage === "addFile") {
-    renderedComponent = <AddFileComponent />;
-  } else if (actualPage === "showSettings") {
-    renderedComponent = <ShowUserSettingsComponent />;
-  }
-
   return (
     <div>
-      <HeaderUser onClickInNav={onNavClick} />
-      {renderedComponent}
+      <HeaderUser />
       <div></div>
     </div>
   );

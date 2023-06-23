@@ -1,0 +1,59 @@
+@import "../variables.css";
+
+.uploadFileButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: var(--primary-color1);
+  color: var(--primary-color4);
+  font-family: "Changa One";
+
+  /* color: #fff; */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100px;
+  text-transform: uppercase;
+  align-self: center;
+}
+
+.uploadFileButton:hover {
+  background-color: var(--primary-color3);
+  color: white;
+}
+
+.inputDocumentTypeDescription {
+  margin-right: 20px;
+  text-transform: uppercase;
+}
+
+.selectDocumentType {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+.addFileContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  /* align-items: center; */
+}
+select {
+  align-self: center;
+  margin: 10px 0;
+  padding: 3px;
+  border: 1px solid var(--primary-color3);
+  border-radius: 5px;
+  width: 300px;
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  line-height: normal; /* Usunięcie domyślnej wartości line-height */
+  height: 30px; /* Wysokość elementu select */
+}
+
+select:enabled {
+  border: 1px solid var(--primary-color1);
+}
