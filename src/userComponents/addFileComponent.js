@@ -9,6 +9,8 @@ import styles from "./addFileComponent.module.css";
 const AddFileComponent = () => {
   const [files, setFiles] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
+  const [subTitlesOption, setSubtitlesOption] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const activeIdUser = useSelector((state) => state.userStatus.userId);
   const activeUserEmail = useSelector((state) => state.userStatus.userEmail);
@@ -28,6 +30,10 @@ const AddFileComponent = () => {
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
+  };
+
+  const handleSubTitleOptionChange = (event) => {
+    setSubtitlesOption(event.target.value);
   };
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
@@ -58,9 +64,23 @@ const AddFileComponent = () => {
     onDrop,
   });
 
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   const uploadFiles = () => {
     files.forEach((file) => {
-      const childRef = ref(myStorage, `users/${activeIdUser}/${file.name}`);
+      let refDataBase;
+      if (selectedOption === "books") {
+        refDataBase = `users/${activeIdUser}/books/${file.name}`;
+      } else {
+        refDataBase = `users/${activeIdUser}/${selectedOption}/${subTitlesOption}/${file.name}`;
+      }
+      const childRef = ref(myStorage, refDataBase);
 
       uploadBytes(childRef, file)
         .then(() => {
@@ -99,14 +119,18 @@ const AddFileComponent = () => {
           <p className={styles.inputDocumentTypeDescription}>
             Wybierz podkategorię
           </p>
-          <select className="inputStyle"> {receiptCategoryComponent}</select>{" "}
+          <select onChange={handleSubTitleOptionChange} className="inputStyle">
+            {receiptCategoryComponent}
+          </select>
         </div>
       ) : selectedOption === "document" ? (
         <div className={styles.selectDocumentType}>
           <p className={styles.inputDocumentTypeDescription}>
             Wybierz podkategorię
           </p>
-          <select className="inputStyle"> {docCategoryComponent} </select>{" "}
+          <select onChange={handleSubTitleOptionChange} className="inputStyle">
+            {docCategoryComponent}
+          </select>
         </div>
       ) : null}
 
@@ -144,9 +168,28 @@ const AddFileComponent = () => {
           ))}
         </ul>
       </div>
-      <button className={styles.uploadFileButton} onClick={uploadFiles}>
+      <button className={styles.uploadFileButton} onClick={openModal}>
         Wyslij
       </button>
+      {modalOpen && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <span className={styles.close} onClick={closeModal}>
+              &times;
+            </span>
+            <div className={styles.inputContainer}>
+              <p className={styles.textInfo}>Dodaj opis</p>
+              <input className={styles.inputModal}></input>
+            </div>
+            <div className={styles.inputContainer}>
+              <p className={styles.textInfo}>specjalista</p>
+              <input className={styles.inputModal}></input>
+            </div>
+
+            <button className={styles.modalButton}>Wyslij</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
