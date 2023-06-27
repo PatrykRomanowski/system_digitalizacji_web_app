@@ -48,7 +48,16 @@ const LoginPage = () => {
               get(child(userRef, "/dataCategory")).then((snapshot) => {
                 const dataArray = snapshot.val();
                 console.log(dataArray);
+                dispatch(
+                  userActions.addDocCategories({ value: dataArray.documents })
+                );
+                dispatch(
+                  userActions.addRecipesCategories({
+                    value: dataArray.receipt,
+                  })
+                );
               });
+
               navigate("/userPanel");
             }
           });

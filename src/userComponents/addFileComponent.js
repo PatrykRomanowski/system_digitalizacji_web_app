@@ -13,6 +13,19 @@ const AddFileComponent = () => {
   const activeIdUser = useSelector((state) => state.userStatus.userId);
   const activeUserEmail = useSelector((state) => state.userStatus.userEmail);
 
+  const docCategories = useSelector((state) => state.userStatus.docCategories);
+  const reciperCategories = useSelector(
+    (state) => state.userStatus.recipesCategories
+  );
+
+  const receiptCategoryComponent = reciperCategories.map((item) => {
+    return <option value={item}>{item}</option>;
+  });
+
+  const docCategoryComponent = docCategories.map((item) => {
+    return <option value={item}>{item}</option>;
+  });
+
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
@@ -76,10 +89,26 @@ const AddFileComponent = () => {
         >
           <option value="">Wybierz...</option>
           <option value="books">KSIĄŻKI</option>
-          <option value="docs">DOKUMENTY</option>
-          <option value="paragons">PARAGONY</option>
+          <option value="document">DOKUMENTY</option>
+          <option value="receipt">PARAGONY</option>
         </select>
       </div>
+
+      {selectedOption === "receipt" ? (
+        <div className={styles.selectDocumentType}>
+          <p className={styles.inputDocumentTypeDescription}>
+            Wybierz podkategorię
+          </p>
+          <select className="inputStyle"> {receiptCategoryComponent}</select>{" "}
+        </div>
+      ) : selectedOption === "document" ? (
+        <div className={styles.selectDocumentType}>
+          <p className={styles.inputDocumentTypeDescription}>
+            Wybierz podkategorię
+          </p>
+          <select className="inputStyle"> {docCategoryComponent} </select>{" "}
+        </div>
+      ) : null}
 
       <div
         {...getRootProps()}

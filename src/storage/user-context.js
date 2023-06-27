@@ -21,6 +21,9 @@ const userContext = createSlice({
     addDocCategories(state, action) {
       state.docCategories = action.payload.value;
     },
+    addRecipesCategories(state, action) {
+      state.recipesCategories = action.payload.value;
+    },
   },
 });
 
