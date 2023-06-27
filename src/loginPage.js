@@ -45,6 +45,10 @@ const LoginPage = () => {
             if (isAdmin.val() === true) {
               navigate("/adminPanel");
             } else {
+              get(child(userRef, "/dataCategory")).then((snapshot) => {
+                const dataArray = snapshot.val();
+                console.log(dataArray);
+              });
               navigate("/userPanel");
             }
           });

@@ -3,7 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 const userContext = createSlice({
   name: "userInfo",
 
-  initialState: { userId: "", userEmail: "" },
+  initialState: {
+    userId: "",
+    userEmail: "",
+    docCategories: [],
+    recipesCategories: [],
+  },
   reducers: {
     login(state, action) {
       state.userEmail = action.payload.userEmail;
@@ -12,6 +17,9 @@ const userContext = createSlice({
     logOut(state) {
       state.userEmail = "";
       state.userId = "";
+    },
+    addDocCategories(state, action) {
+      state.docCategories = action.payload.value;
     },
   },
 });
