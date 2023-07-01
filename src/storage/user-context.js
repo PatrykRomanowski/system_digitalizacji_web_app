@@ -8,6 +8,8 @@ const userContext = createSlice({
     userEmail: "",
     docCategories: [],
     recipesCategories: [],
+    discSpacesUse: 0,
+    allocatedDiscSpace: 0,
   },
   reducers: {
     login(state, action) {
@@ -23,6 +25,10 @@ const userContext = createSlice({
     },
     addRecipesCategories(state, action) {
       state.recipesCategories = action.payload.value;
+    },
+    addAdditionalInfoAboutUser(state, action) {
+      state.discSpacesUse = action.payload.discSpacesUse;
+      state.allocatedDiscSpace = action.payload.allocatedDiskSpace;
     },
   },
 });

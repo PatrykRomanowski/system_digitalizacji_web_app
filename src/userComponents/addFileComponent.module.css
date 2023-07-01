@@ -103,6 +103,12 @@
   background-color: #0069d9;
 }
 
+.modalButton:disabled,
+.uploadFileButton:disabled {
+  background-color: #888;
+  cursor: no-drop;
+}
+
 .textInfo {
   margin-top: 20px;
   text-transform: uppercase;

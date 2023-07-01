@@ -45,6 +45,26 @@ const LoginPage = () => {
             if (isAdmin.val() === true) {
               navigate("/adminPanel");
             } else {
+              const allocatedDiscSpacePromise = get(
+                //pobieranie informacji o wykorzystanych i przydzielonych danych
+                child(userRef, "/allocatedDiskSpace")
+              );
+              const diskSpacesUsePromise = get(
+                child(userRef, "/diskSpaceUsed")
+              );
+
+              Promise.all([
+                allocatedDiscSpacePromise,
+                diskSpacesUsePromise,
+              ]).then((snapshots) => {
+                dispatch(
+                  userActions.addAdditionalInfoAboutUser({
+                    allocatedDiskSpace: snapshots[0].val(),
+                    discSpacesUse: snapshots[1].val(),
+                  })
+                );
+              });
+
               get(child(userRef, "/dataCategory")).then((snapshot) => {
                 const dataArray = snapshot.val();
                 console.log(dataArray);
