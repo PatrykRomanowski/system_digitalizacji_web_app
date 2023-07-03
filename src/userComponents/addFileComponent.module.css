@@ -79,6 +79,36 @@
   margin-top: 10px;
   font-family: "Roboto";
 }
+
+.statusBar {
+  display: flex;
+  width: 250px;
+  height: 50px;
+  border-radius: 5px;
+  position: fixed;
+  bottom: 10px;
+  left: 20px;
+  color: #fefefe;
+  font-family: "Changa One";
+  font-size: 22px;
+  align-items: center;
+  justify-content: center;
+  transition: 0.5s ease;
+}
+
+.statusBarHidden {
+  bottom: -80px;
+  transition: 1.5s ease;
+}
+
+.errorStatusBar {
+  background-color: red;
+}
+
+.successStatusBar {
+  background-color: greenyellow;
+}
+
 .inputModal {
   margin: 10px 0;
   padding: 10px;

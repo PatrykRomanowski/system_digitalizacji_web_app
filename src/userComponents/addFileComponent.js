@@ -1,11 +1,17 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { myStorage, firebaseRealtime } from "../firebase";
 import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
 
 import styles from "./addFileComponent.module.css";
-import { set, ref as refFirebaseRealtime, push } from "firebase/database";
+import {
+  set,
+  ref as refFirebaseRealtime,
+  push,
+  update,
+} from "firebase/database";
+import { userActions } from "../storage/user-context";
 
 const AddFileComponent = () => {
   const [files, setFiles] = useState([]);
@@ -20,6 +26,9 @@ const AddFileComponent = () => {
   const [documentDescription, setDocumentDescription] = useState("");
   const [receiptDescription, setReceiptDescription] = useState("");
   const [receiptValue, setReceiptValue] = useState(0);
+  const [sendMessage, setSendMessage] = useState("");
+  const [sendIsSuccess, setSendIsSuccess] = useState(false);
+  const [statusBarIsActive, setStatusBarIsActive] = useState();
 
   const activeIdUser = useSelector((state) => state.userStatus.userId);
   const discSpacesUse = useSelector((state) => state.userStatus.discSpacesUse);
@@ -27,10 +36,19 @@ const AddFileComponent = () => {
     (state) => state.userStatus.allocatedDiscSpace
   );
 
+  const dispatch = useDispatch();
+
   const docCategories = useSelector((state) => state.userStatus.docCategories);
   const reciperCategories = useSelector(
     (state) => state.userStatus.recipesCategories
   );
+
+  useEffect(() => {
+    // Symulacja zmiany wartości sendIsSuccess po pewnym czasie
+    setTimeout(() => {
+      setStatusBarIsActive(true);
+    }, 3000); // Po 3 sekundach zmień sendIsSuccess na true (symulacja sukcesu)
+  }, []);
 
   useEffect(() => {
     // walidowanie przycisku
@@ -159,8 +177,8 @@ const AddFileComponent = () => {
       (acc, currentSize) => acc + currentSize,
       0
     ); // suma wszystkich plików w bajtach
-    const totalSizeInMB = totalSizeInBytes / (1024 * 1024); // przeliczenie na megabajty
-    console.log("Total Size (MB):", totalSizeInMB);
+
+    console.log("Total Size (MB):", totalSizeInBytes);
 
     const firebaseRealtimeRef2 = refFirebaseRealtime(firebaseRealtime);
 
@@ -179,37 +197,60 @@ const AddFileComponent = () => {
         author: bookAuthor,
         title: bookTitle,
         description: bookDescription,
+        size: fileSizes,
       };
     } else if (selectedOption === "document") {
       data = {
         description: documentDescription,
+        size: fileSizes,
       };
     } else if (selectedOption === "receipt") {
       data = {
         description: receiptDescription,
         value: receiptValue,
+        size: fileSizes,
       };
     }
 
     try {
-      for (const file of files) {
-        const refDataBase = `${preRefDataBase}/${uniqueKey}/${file.name}/`;
-        const refRealtimeDatabase = `${preRefRealtimeDatabase}/${uniqueKey}/`;
-        const childRef = ref(myStorage, refDataBase);
-        const firebaseRealtimeRef = refFirebaseRealtime(
+      const refRealtimeDatabase = `${preRefRealtimeDatabase}/${uniqueKey}/`;
+      const firebaseRealtimeRef = refFirebaseRealtime(
+        firebaseRealtime,
+        refRealtimeDatabase
+      );
+
+      if (discSpacesUse + totalSizeInBytes < allocatedDiscSpace) {
+        for (const file of files) {
+          const refDataBase = `${preRefDataBase}/${uniqueKey}/${file.name}/`;
+          const childRef = ref(myStorage, refDataBase);
+
+          await uploadBytes(childRef, file); // przesyłanie plików do storage
+          const url = await getDownloadURL(childRef);
+          console.log(`Plik ${file.name} został przesłany. URL: ${url}`);
+        }
+        await set(firebaseRealtimeRef, data); // przesyłanie danych do firebaseRealtime(opisy itp.)
+        console.log("Opisy zostały dodane");
+        const newDiskSpaceUsed = {
+          diskSpaceUsed: discSpacesUse + totalSizeInBytes,
+        };
+        const sendNewDiscSpaceUsedRef = refFirebaseRealtime(
           firebaseRealtime,
-          refRealtimeDatabase
+          `users/${activeIdUser}`
         );
-
-        await uploadBytes(childRef, file);
-        const url = await getDownloadURL(childRef);
-
-        await set(firebaseRealtimeRef, data);
-        console.log(`Plik ${file.name} został przesłany. URL: ${url}`);
+        await update(sendNewDiscSpaceUsedRef, newDiskSpaceUsed);
+        dispatch(
+          userActions.newDiscSpacesUse({
+            value: discSpacesUse + totalSizeInBytes,
+          })
+        );
+      } else {
+        console.log("brak miejsca w bazie danych!!!");
       }
 
-      console.log("Opisy zostały dodane");
+      setSelectedOption("");
+      setSubtitlesOption();
       setFiles([]);
+      closeModal(true);
     } catch (error) {
       console.log("Wystąpił błąd podczas przesyłania plików:", error);
     }
@@ -377,6 +418,13 @@ const AddFileComponent = () => {
           </div>
         </div>
       )}
+      <div
+        className={`${styles.statusBar} ${
+          sendIsSuccess ? styles.successStatusBar : styles.errorStatusBar
+        } ${statusBarIsActive ? "" : styles.statusBarHidden}`}
+      >
+        {sendMessage}
+      </div>
     </div>
   );
 };

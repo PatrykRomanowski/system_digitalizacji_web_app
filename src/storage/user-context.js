@@ -1,4 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {
+  createSlice
+} from "@reduxjs/toolkit";
 
 const userContext = createSlice({
   name: "userInfo",
@@ -30,6 +32,9 @@ const userContext = createSlice({
       state.discSpacesUse = action.payload.discSpacesUse;
       state.allocatedDiscSpace = action.payload.allocatedDiskSpace;
     },
+    newDiscSpacesUse(state, action) {
+      state.discSpacesUse = state.discSpacesUse + action.payload.value;
+    }
   },
 });
 
