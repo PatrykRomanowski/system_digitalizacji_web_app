@@ -1,10 +1,7 @@
 import React from "react";
+
 const SettingUserComponent = () => {
-  return (
-    <div>
-      <div>This is showSettings</div>
-    </div>
-  );
+  <div>setting component</div>;
 };
 
 export default SettingUserComponent;

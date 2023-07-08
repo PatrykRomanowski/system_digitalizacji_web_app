@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { useSelector, useDispatch } from "react-redux";
 import { myStorage, firebaseRealtime } from "../firebase";
@@ -42,13 +42,6 @@ const AddFileComponent = () => {
   const reciperCategories = useSelector(
     (state) => state.userStatus.recipesCategories
   );
-
-  useEffect(() => {
-    // Symulacja zmiany wartości sendIsSuccess po pewnym czasie
-    setTimeout(() => {
-      setStatusBarIsActive(true);
-    }, 3000); // Po 3 sekundach zmień sendIsSuccess na true (symulacja sukcesu)
-  }, []);
 
   useEffect(() => {
     // walidowanie przycisku
@@ -124,6 +117,15 @@ const AddFileComponent = () => {
 
   const handleSubTitleOptionChange = (event) => {
     setSubtitlesOption(event.target.value);
+  };
+
+  const showHiddenStatusBar = () => {
+    setTimeout(() => {
+      setStatusBarIsActive(true);
+    }, 1000); // Po 3 sekundach zmień sendIsSuccess na true (symulacja sukcesu)
+    setTimeout(() => {
+      setStatusBarIsActive(false);
+    }, 4000);
   };
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
@@ -244,8 +246,11 @@ const AddFileComponent = () => {
           })
         );
       } else {
-        console.log("brak miejsca w bazie danych!!!");
       }
+      setSendMessage("pliki zostały przesłane");
+      setSendIsSuccess(true);
+      showHiddenStatusBar();
+      closeModal(true);
 
       setSelectedOption("");
       setSubtitlesOption();
@@ -253,6 +258,9 @@ const AddFileComponent = () => {
       closeModal(true);
     } catch (error) {
       console.log("Wystąpił błąd podczas przesyłania plików:", error);
+      setSendMessage("wystąpił głąd podczas przesyłania plików!!!");
+      setSendIsSuccess(false);
+      showHiddenStatusBar();
     }
   };
 

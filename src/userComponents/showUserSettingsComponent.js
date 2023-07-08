@@ -1,11 +1,7 @@
 import React from "react";
 
 const ShowUserSettingsComponent = () => {
-  return (
-    <div>
-      <div>This is settings component</div>
-    </div>
-  );
+  return <div>XD</div>;
 };
 
 export default ShowUserSettingsComponent;
