@@ -6,6 +6,10 @@ import SettingUserComponent from "./settingUserComponent";
 import ShowFileComponent from "./showFileComponent";
 import AddFileComponent from "./addFileComponent";
 
+import ShowReceiptCategory from "./fileCategory/showReceiptCategory";
+import ShowDocumentCategory from "./fileCategory/showDocumentCategory";
+import ShowBookCategory from "./fileCategory/showBookCategory";
+
 const MainPageUser = () => {
   const [actualPage, setActualPage] = useState("");
   const navigate = useNavigate();
@@ -25,14 +29,34 @@ const MainPageUser = () => {
     navigate("/logoutUser");
   };
 
+  const setCategoryHandler = (props) => {
+    setActualPage(props);
+  };
+
+  const setShowFileCategoryHandler = (props) => {
+    setActualPage("showFile");
+  };
+
   let pageComponent;
 
   if (actualPage === "addFile") {
     pageComponent = <AddFileComponent />;
   } else if (actualPage === "showFile") {
-    pageComponent = <ShowFileComponent />;
+    pageComponent = <ShowFileComponent checkCategory={setCategoryHandler} />;
   } else if (actualPage === "showSettings") {
     pageComponent = <SettingUserComponent />;
+  } else if (actualPage === "documentCategory") {
+    pageComponent = (
+      <ShowDocumentCategory setShowFileCategory={setShowFileCategoryHandler} />
+    );
+  } else if (actualPage === "receiptCategory") {
+    pageComponent = (
+      <ShowReceiptCategory setShowFileCategory={setShowFileCategoryHandler} />
+    );
+  } else if (actualPage === "bookCategory") {
+    pageComponent = (
+      <ShowBookCategory setShowFileCategory={setShowFileCategoryHandler} />
+    );
   }
 
   return (

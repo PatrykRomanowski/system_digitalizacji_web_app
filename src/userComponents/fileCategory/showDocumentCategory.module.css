@@ -1,0 +1,97 @@
+@import "../../variables.css";
+
+.documentCategoryContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.goBackButton {
+  cursor: pointer;
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 350px;
+  padding: 10px;
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  font-family: "Changa One";
+  background-color: var(--gray1);
+  color: var(--gray3);
+}
+
+.goBackButton:hover {
+  color: var(--gray4);
+}
+
+.itemContainer {
+  display: flex;
+  width: 90%;
+  /* padding: 15px; */
+  margin: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  box-shadow: 1px 1px 18px rgba(0, 0, 0, 0.8);
+  justify-content: space-between;
+}
+
+.itemsContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.itemContainer:hover {
+  transform: scale(1.04);
+}
+
+p {
+  text-transform: uppercase;
+  font-size: 8px;
+  margin: 4px;
+}
+
+.inputModal {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  width: 300px;
+  font-size: 16px;
+}
+
+input {
+  width: 250px;
+}
+
+.itemDescription {
+}
+
+.itemCategory {
+}
+
+.itemSize {
+  color: red;
+}
+
+.inputContainer {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.itemSize,
+.itemCategory,
+.itemDescription {
+  margin: 4px;
+}
+
+.yourDocumentsText {
+  display: flex;
+  justify-content: center;
+  font-family: "Changa One";
+  margin-top: 20px;
+  color: rgb(76, 71, 71);
+}

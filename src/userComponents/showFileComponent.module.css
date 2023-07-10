@@ -4,12 +4,41 @@
 }
 
 .bookCategory {
-  display: "flex";
-  justify-content: "center";
-  align-items: "center";
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 250px;
   height: 350px;
   background-position: center;
-  margin: 10px;
+  margin: 20px;
   margin-top: 40px;
+  transition: 0.2s ease-in-out;
+  box-shadow: 10px 25px 18px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.bookCategory:hover {
+  transform: scale(1.1);
+}
+
+.photoCategoryDescription {
+  font-family: "Changa One";
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: wheat;
+  width: 100%;
+  text-align: center;
+}
+
+.componentContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.showFileTitle {
+  font-family: "Changa One";
+  font-size: 18px;
+  margin-top: 50px;
 }
