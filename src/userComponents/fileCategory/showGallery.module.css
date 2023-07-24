@@ -1,0 +1,20 @@
+.image-gallery-thumbnails-container {
+  transform: translate3d(0, 0, 0) !important;
+}
+
+.showPhotoButton {
+  position: fixed;
+  top: 10vh;
+  left: 10vw;
+  z-index: 1;
+  padding: 15px;
+  border: none;
+  font-family: "Changa One", sans-serif;
+  background-color: rgba(255, 255, 255, 0.33);
+  transition: linear 0.15s;
+  cursor: pointer;
+}
+
+.showPhotoButton:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}

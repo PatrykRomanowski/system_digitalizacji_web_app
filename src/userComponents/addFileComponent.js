@@ -113,6 +113,7 @@ const AddFileComponent = () => {
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
+    setFiles([]);
   };
 
   const handleSubTitleOptionChange = (event) => {
@@ -128,29 +129,38 @@ const AddFileComponent = () => {
     }, 4000);
   };
 
-  const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
-    acceptedFiles.forEach((file) => {
-      // check file type and extension here
-      if (
-        file.type !== "image/jpeg" &&
-        file.type !== "image/png" &&
-        file.type !== "image/jpg"
-      ) {
-        console.log(`Plik ${file.name} ma niepoprawny typ lub rozszerzenie`);
-        return;
+  const onDrop = useCallback(
+    (acceptedFiles, rejectedFiles) => {
+      const filteredFiles = acceptedFiles.filter(
+        (file) =>
+          file.type === "image/jpeg" ||
+          file.type === "image/png" ||
+          file.type === "image/jpg"
+      );
+
+      if (selectedOption === "books") {
+        setFiles((prevFiles) => {
+          const newFiles = filteredFiles.filter(
+            (file) => !prevFiles.some((prevFile) => prevFile.name === file.name)
+          );
+          return [...prevFiles, ...newFiles].sort((a, b) =>
+            a.name.localeCompare(b.name)
+          );
+        });
+      } else {
+        setFiles((prevFiles) => {
+          const newFiles = filteredFiles.filter(
+            (file) => !prevFiles.some((prevFile) => prevFile.name === file.name)
+          );
+          return [...prevFiles, ...newFiles];
+        });
       }
-
-      console.log(acceptedFiles);
-      setFiles((prevFiles) => [
-        ...prevFiles,
-        ...acceptedFiles.filter((file) => !prevFiles.includes(file)),
-      ]);
-    });
-
-    rejectedFiles.forEach((file) => {
-      console.log(`Plik ${file.name} został odrzucony`);
-    });
-  }, []);
+      rejectedFiles.forEach((file) => {
+        console.log(`Plik ${file.name} został odrzucony`);
+      });
+    },
+    [selectedOption]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -297,6 +307,14 @@ const AddFileComponent = () => {
           <select onChange={handleSubTitleOptionChange} className="inputStyle">
             {docCategoryComponent}
           </select>
+        </div>
+      ) : selectedOption === "books" ? (
+        <div className={styles.booksInfo}>
+          <p className={styles.booksInfoParagraph}>
+            Aby poprawnie dodać książkę, nazwa pliku musi odpowiadać konkretnej
+            stronie książki + rozszerzenie, plik strony tytułowej powinien mieć
+            nazwę "title" + rozszerzenie
+          </p>
         </div>
       ) : null}
 

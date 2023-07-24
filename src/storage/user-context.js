@@ -12,6 +12,7 @@ const userContext = createSlice({
     recipesCategories: [],
     discSpacesUse: 0,
     allocatedDiscSpace: 0,
+    actualGalleryRef: "",
   },
   reducers: {
     login(state, action) {
@@ -34,6 +35,9 @@ const userContext = createSlice({
     },
     newDiscSpacesUse(state, action) {
       state.discSpacesUse = state.discSpacesUse + action.payload.value;
+    },
+    setActualGalleryRef(state, action) {
+      state.actualGalleryRef = action.payload.xd;
     }
   },
 });

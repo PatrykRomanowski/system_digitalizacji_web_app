@@ -1,0 +1,66 @@
+.titleImage {
+  width: 90%;
+  height: 60%;
+  display: flex;
+  /* justify-content: center; */
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  align-self: center;
+  justify-self: end;
+  flex-grow: 0.6;
+}
+
+.allBooksContainer {
+  display: flex;
+  width: 90vw;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.bookContainer {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  height: 300px;
+  margin: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  box-shadow: 1px 1px 18px rgba(0, 0, 0, 0.8);
+}
+
+.bookTitle,
+.bookAuthor {
+  flex-grow: 0.2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-family: "Roboto-M";
+  color: rgb(76, 71, 71);
+}
+
+.bookAuthor {
+  font-size: 10px;
+}
+
+.goBackButton {
+  cursor: pointer;
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 350px;
+  padding: 10px;
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  font-family: "Changa One";
+  background-color: var(--gray1);
+  color: var(--gray3);
+}
+
+.bookContainer:hover {
+  transform: scale(1.04);
+}

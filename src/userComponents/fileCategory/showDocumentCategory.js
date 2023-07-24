@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { myStorage } from "../../firebase";
 import { firebaseRealtime } from "../../firebase";
-import { ref, get, child } from "firebase/database";
+import { ref, get } from "firebase/database";
+
+import { userActions } from "../../storage/user-context";
+import { navActions } from "../../storage/nav-context";
+
+import { useNavigate } from "react-router-dom";
 
 import styles from "./showDocumentCategory.module.css";
 
@@ -15,6 +19,9 @@ const ShowDocumentCategory = (props) => {
   const [sortDescriptionValue, setSortDescriptionValue] = useState("");
   const [sortItem, setSortItem] = useState([{}]);
   const [searchCategoryInput, setSearchCategoryInput] = useState();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const setShowFileCategory = () => {
     props.setShowFileCategory();
@@ -49,6 +56,22 @@ const ShowDocumentCategory = (props) => {
 
   const searchCategoryOption = (event) => {
     setSearchCategoryInput(event.target.value);
+  };
+
+  const getPhoto = (item) => {
+    // kliknięcie w odpowiednią pozycję w celu wyświetlenia galerii
+    console.log(item.itemCategory);
+
+    // dispatch(
+    //   userActions.setActualGalleryRef(
+    //     `/users/${userId}/document/${item.itemCategory}/${item.itemId}`
+    //   )
+    const actualRef = `/users/${userId}/document/${item.itemCategory}/${item.itemId}`;
+    const actualKategory = "documentCategory";
+    dispatch(userActions.setActualGalleryRef({ xd: actualRef }));
+    dispatch(navActions.setActualCategory({ actual: actualKategory }));
+
+    navigate("/showGallery");
   };
 
   useEffect(() => {
@@ -101,7 +124,12 @@ const ShowDocumentCategory = (props) => {
 
   const showAllItem = allItem.map((item) => {
     return (
-      <div className={styles.itemContainer}>
+      <div
+        onClick={() =>
+          getPhoto({ itemId: item.itemId, itemCategory: item.itemKategory })
+        }
+        className={styles.itemContainer}
+      >
         <div style={{ flex: "6" }}>
           <p>Opis</p>
           <div className={styles.itemDescription}>{item.itemDescription}</div>
@@ -125,7 +153,12 @@ const ShowDocumentCategory = (props) => {
   const showSortAllItem = sortItem.map((item) => {
     //posortowane dane
     return (
-      <div className={styles.itemContainer}>
+      <div
+        onClick={() =>
+          getPhoto({ itemId: item.itemId, itemCategory: item.itemKategory })
+        }
+        className={styles.itemContainer}
+      >
         <div style={{ flex: "6" }}>
           <p>Opis</p>
           <div className={styles.itemDescription}>{item.itemDescription}</div>
@@ -151,7 +184,7 @@ const ShowDocumentCategory = (props) => {
   return (
     <div className={styles.documentCategoryContainer}>
       <div className={styles.inputContainer}>
-        <div>
+        <div className={styles.searchInput}>
           <p>Wybierz kategorię</p>
           <select
             className="inputStyle"
@@ -162,7 +195,7 @@ const ShowDocumentCategory = (props) => {
             {categoryItem}
           </select>
         </div>
-        <div>
+        <div className={styles.searchInput}>
           <p>Wyszukaj po opisie</p>
           <input
             type="text"

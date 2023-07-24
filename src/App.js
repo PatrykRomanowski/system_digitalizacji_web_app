@@ -12,6 +12,8 @@ import MainPageUser from "./userComponents/mainPageUser";
 import LogoutUser from "./userComponents/logoutUser";
 import MainPageAdmin from "./adminComponents/mainPageAdmin";
 import LogoutAdmin from "./adminComponents/logoutAdmin";
+import ShowGallery from "./userComponents/fileCategory/showGallery";
+import ShowGalleryBook from "./userComponents/fileCategory/showGalleryBook";
 
 function App() {
   return (
@@ -26,6 +28,11 @@ function App() {
             <Route path="/userPanel" element={<MainPageUser />}></Route>
             <Route path="/logoutUser" element={<LogoutUser />}></Route>
             <Route path="/logoutAdmin" element={<LogoutAdmin />}></Route>
+            <Route path="/showGallery" element={<ShowGallery />}></Route>
+            <Route
+              path="/showGalleryBook"
+              element={<ShowGalleryBook />}
+            ></Route>
           </Routes>
         </div>
       </Router>

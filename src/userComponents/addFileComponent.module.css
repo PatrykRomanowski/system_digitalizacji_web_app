@@ -176,3 +176,17 @@ select {
 select:enabled {
   border: 1px solid var(--primary-color1);
 }
+
+.booksInfo {
+  display: flex;
+  align-self: center;
+  width: 80%;
+  border: 1px solid rgb(251, 97, 151);
+  border-radius: 10px;
+  margin: 20px;
+}
+
+.booksInfoParagraph {
+  font-size: 14px;
+  text-align: center;
+}

@@ -24,6 +24,10 @@
   color: var(--gray4);
 }
 
+.searchInput {
+  margin: 10px;
+}
+
 .itemContainer {
   display: flex;
   width: 90%;
@@ -80,6 +84,7 @@ input {
   margin-top: 12px;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .itemSize,

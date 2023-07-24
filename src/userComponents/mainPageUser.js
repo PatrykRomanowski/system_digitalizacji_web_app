@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+
 import { useNavigate } from "react-router-dom";
 
 import HeaderUser from "./headerUser";
@@ -11,7 +13,9 @@ import ShowDocumentCategory from "./fileCategory/showDocumentCategory";
 import ShowBookCategory from "./fileCategory/showBookCategory";
 
 const MainPageUser = () => {
-  const [actualPage, setActualPage] = useState("");
+  const [actualPage, setActualPage] = useState(
+    useSelector((state) => state.navStatus.actualCategory)
+  );
   const navigate = useNavigate();
 
   const onClickNav = (data) => {
