@@ -19,17 +19,48 @@ import styles from "./showBookCategory.module.css";
 
 const ShowBookCategory = (props) => {
   const userId = useSelector((state) => state.userStatus.userId);
+
   const [allBooks, setAllBooks] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalButtonDisabled, setModalButtonDisabled] = useState(true);
+  const [pageSelectedByUser, setPageSelectedByUser] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const goToBookGallery = (props) => {
-    navigate("/showGalleryBook");
+  const showModalHandler = (props) => {
+    setShowModal(true);
     const actualRef = `/users/${userId}/books/${props}`;
     const actualCategory = "bookCategory";
     dispatch(navActions.setActualCategory({ actual: actualCategory }));
     dispatch(userActions.setActualGalleryRef({ xd: actualRef }));
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const goToBookGallery = () => {
+    dispatch(
+      userActions.setActualSiteOfBook({ actual: pageSelectedByUser - 1 })
+    );
+    navigate("/showGalleryBook");
+  };
+
+  const buttonDisabledHandler = (value) => {
+    if (value) {
+      setModalButtonDisabled(false);
+    } else {
+      setModalButtonDisabled(true);
+    }
+  };
+
+  const pageSelectedByUserHandler = (event) => {
+    const value = event.target.value;
+    const numberValue = parseInt(value);
+
+    setPageSelectedByUser(numberValue);
+    buttonDisabledHandler(numberValue);
   };
 
   useEffect(() => {
@@ -87,7 +118,8 @@ const ShowBookCategory = (props) => {
   const showAllBooks = allBooks.map((book) => {
     return (
       <div
-        onClick={() => goToBookGallery(book.itemId)}
+        onClick={() => showModalHandler(book.itemId)}
+        // onClick={showModalHandler}
         className={styles.bookContainer}
         key={book.itemId}
       >
@@ -113,6 +145,33 @@ const ShowBookCategory = (props) => {
       <button className={styles.goBackButton} onClick={setShowFileCategory}>
         WRÓĆ DO WSZYSTKICH KATEGORII
       </button>
+      {showModal ? (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <span className={styles.close} onClick={closeModal}>
+              &times;
+            </span>
+            <div className={styles.inputContainer}>
+              <p className={styles.textInfo}>
+                WYBIERZ STRONĘ OD KTÓREJ CHCESZ ZACZĄĆ
+              </p>
+              <input
+                type="number"
+                value={pageSelectedByUser}
+                onChange={pageSelectedByUserHandler}
+                className={styles.inputModal}
+              ></input>
+            </div>
+            <button
+              disabled={modalButtonDisabled}
+              className={styles.modalButton}
+              onClick={() => goToBookGallery()}
+            >
+              Wyświetl Książkę
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

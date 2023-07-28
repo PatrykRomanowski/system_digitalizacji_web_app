@@ -19,6 +19,10 @@ const ShowGalleryBook = () => {
   const [allUrls, setAllUrls] = useState();
   const [allSiteDownload, setAllSiteDownload] = useState(false);
 
+  const siteSelectedByUser = useSelector(
+    (state) => state.userStatus.actualSite
+  );
+
   const navigate = useNavigate();
 
   const backHandler = () => {
@@ -31,15 +35,27 @@ const ShowGalleryBook = () => {
 
   const sliderIndex = (currentIndex) => {
     if (currentSite < siteCounter - 2 && !allSiteDownload) {
-      console.log(currentIndex);
-      setCurrentSite(currentIndex);
+      console.log(currentIndex + 1);
 
-      const nextPhotosUrl = [allUrls[currentSite + 2]];
-      Promise.all(nextPhotosUrl).then((urls) => {
-        console.log(urls);
-        setImageList((prevImageList) => [...prevImageList, urls[0]]);
-      });
-      console.log(imageList);
+      if (currentSite < currentIndex) {
+        setCurrentSite(currentIndex);
+
+        console.log("strona w dół");
+      } else {
+        setCurrentSite(currentIndex);
+
+        console.log("strona w górę");
+        const nextPhotosUrl = [allUrls[currentSite - 2]];
+        Promise.all(nextPhotosUrl).then((urls) => {
+          console.log(urls);
+          setImageList((prevImageList) => [
+            ...prevImageList,
+            urls[currentSite - 2],
+          ]);
+        });
+      }
+
+      // console.log(imageList);
     }
 
     if (currentSite === siteCounter) {
@@ -51,6 +67,7 @@ const ShowGalleryBook = () => {
     const fetchImg = async () => {
       try {
         const storageRef = ref(myStorage, activeGalleryRef);
+        setCurrentSite(siteSelectedByUser);
 
         listAll(storageRef).then((res) => {
           const imageUrls = res.items.map((item) =>
@@ -69,9 +86,14 @@ const ShowGalleryBook = () => {
           console.log(imageLength);
 
           const actualPhotos = [];
-          actualPhotos.push(imageUrls[0]);
-          actualPhotos.push(imageUrls[1]);
-
+          if (siteSelectedByUser !== 0) {
+            actualPhotos.push(imageUrls[siteSelectedByUser - 1]);
+            actualPhotos.push(imageUrls[siteSelectedByUser]);
+            actualPhotos.push(imageUrls[siteSelectedByUser + 1]);
+          } else {
+            actualPhotos.push(imageUrls[siteSelectedByUser]);
+            actualPhotos.push(imageUrls[siteSelectedByUser + 1]);
+          }
           Promise.all(actualPhotos).then((urls) => setImageList(urls));
         });
       } catch (err) {

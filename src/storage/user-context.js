@@ -1,6 +1,4 @@
-import {
-  createSlice
-} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const userContext = createSlice({
   name: "userInfo",
@@ -8,6 +6,7 @@ const userContext = createSlice({
   initialState: {
     userId: "",
     userEmail: "",
+    actualSite: 1,
     docCategories: [],
     recipesCategories: [],
     discSpacesUse: 0,
@@ -38,7 +37,10 @@ const userContext = createSlice({
     },
     setActualGalleryRef(state, action) {
       state.actualGalleryRef = action.payload.xd;
-    }
+    },
+    setActualSiteOfBook(state, action) {
+      state.actualSite = action.payload.actual;
+    },
   },
 });
 
