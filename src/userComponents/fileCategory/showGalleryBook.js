@@ -17,7 +17,11 @@ const ShowGalleryBook = () => {
   const [siteCounter, setSiteCounter] = useState(0);
   const [currentSite, setCurrentSite] = useState(0);
   const [allUrls, setAllUrls] = useState();
-  const [allSiteDownload, setAllSiteDownload] = useState(false);
+  const [nextPage, setNextPage] = useState(0);
+  const [getActualPhotoIndexInArray, setGetActualPhotoIndexInArray] =
+    useState(1);
+  const [NumberOfSiteInGallery] = useState(1);
+  const [prevIndex, setPrevIndex] = useState(null);
 
   const siteSelectedByUser = useSelector(
     (state) => state.userStatus.actualSite
@@ -33,34 +37,34 @@ const ShowGalleryBook = () => {
     (state) => state.userStatus.actualGalleryRef
   );
 
-  const sliderIndex = (currentIndex) => {
-    if (currentSite < siteCounter - 2 && !allSiteDownload) {
-      console.log(currentIndex + 1);
-
-      if (currentSite < currentIndex) {
-        setCurrentSite(currentIndex);
-
-        console.log("strona w dół");
+  const currentPageHandler = (currentIndex) => {
+    setGetActualPhotoIndexInArray(currentIndex);
+    console.log("current index: " + currentIndex);
+    if (currentIndex === 0) {
+      if (currentSite === 0) {
+        setCurrentSite((prevSite) => prevSite + 1);
+        setCurrentSite((prevSite) => prevSite - 1);
       } else {
-        setCurrentSite(currentIndex);
-
-        console.log("strona w górę");
-        const nextPhotosUrl = [allUrls[currentSite - 2]];
-        Promise.all(nextPhotosUrl).then((urls) => {
-          console.log(urls);
-          setImageList((prevImageList) => [
-            ...prevImageList,
-            urls[currentSite - 2],
-          ]);
-        });
+        setCurrentSite((prevSite) => prevSite - 1);
+        setNextPage(-1);
       }
-
-      // console.log(imageList);
+    } else if (currentIndex === 2) {
+      if (siteCounter <= currentSite) {
+        setCurrentSite((prevSite) => prevSite);
+      } else {
+        setCurrentSite((prevSite) => prevSite + 1);
+        setNextPage(1);
+      }
+    } else if (currentIndex === 1) {
+      if (prevIndex === 2) {
+        setCurrentSite((prevSite) => prevSite - 1);
+        setNextPage(-1);
+      } else {
+        setCurrentSite((prevSite) => prevSite + 1);
+        setNextPage(1);
+      }
     }
-
-    if (currentSite === siteCounter) {
-      setAllSiteDownload(true);
-    }
+    setPrevIndex(currentIndex);
   };
 
   useEffect(() => {
@@ -83,9 +87,10 @@ const ShowGalleryBook = () => {
           setSiteCounter(imageLength);
           setAllUrls(imageUrls);
           console.log(allUrls);
-          console.log(imageLength);
+          // console.log(imageLength);
 
           const actualPhotos = [];
+
           if (siteSelectedByUser !== 0) {
             actualPhotos.push(imageUrls[siteSelectedByUser - 1]);
             actualPhotos.push(imageUrls[siteSelectedByUser]);
@@ -103,15 +108,55 @@ const ShowGalleryBook = () => {
     fetchImg();
   }, []);
 
+  useEffect(() => {
+    console.log(currentSite);
+    console.log("NextPage: " + nextPage);
+    console.log("SiteCounter: " + siteCounter);
+
+    const actualPhotos = [];
+    if (nextPage === 1) {
+      if (siteCounter > currentSite + 1) {
+        actualPhotos.push(imageList[1]);
+        actualPhotos.push(imageList[2]);
+        actualPhotos.push(allUrls[currentSite + 1]);
+        Promise.all(actualPhotos).then((urls) => setImageList(urls));
+        setGetActualPhotoIndexInArray(1);
+        console.log("!!!");
+      } else {
+        // actualPhotos.push(allUrls[currentSite - 2]);
+        actualPhotos.push(imageList[1]);
+        actualPhotos.push(imageList[2]);
+        Promise.all(actualPhotos).then((urls) => setImageList(urls));
+        setGetActualPhotoIndexInArray(1);
+      }
+    } else if (nextPage === -1) {
+      if (currentSite !== 0) {
+        actualPhotos.push(allUrls[currentSite - 1]);
+        actualPhotos.push(imageList[0]);
+        actualPhotos.push(imageList[1]);
+        Promise.all(actualPhotos).then((urls) => setImageList(urls));
+        setGetActualPhotoIndexInArray(1);
+        console.log("xxx");
+      } else {
+        actualPhotos.push(imageList[0]);
+        actualPhotos.push(imageList[1]);
+        actualPhotos.push(imageList[2]);
+        Promise.all(actualPhotos).then((urls) => setImageList(urls));
+        setGetActualPhotoIndexInArray(0);
+      }
+    }
+  }, [currentSite]);
+
   console.log(activeGalleryRef);
   return (
     <div className={styles.showPhotosContainer}>
       <button className={styles.showPhotoButton} onClick={backHandler}>
         POWRÓT
       </button>
+
       <div className="custom-image-gallery">
         <ImageGallery
-          startIndex={currentSite}
+          startIndex={getActualPhotoIndexInArray}
           showIndex={true}
           items={imageList}
           showThumbnails={true}
@@ -120,7 +165,8 @@ const ShowGalleryBook = () => {
           showNav={true}
           slideInterval={2000}
           thumbnailPosition="bottom"
-          onSlide={sliderIndex}
+          onSlide={currentPageHandler}
+          infinite={false}
         />
       </div>
     </div>
