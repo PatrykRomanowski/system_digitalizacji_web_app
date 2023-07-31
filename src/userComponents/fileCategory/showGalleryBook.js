@@ -22,6 +22,7 @@ const ShowGalleryBook = () => {
     useState(1);
   const [NumberOfSiteInGallery] = useState(1);
   const [prevIndex, setPrevIndex] = useState(null);
+  const [prevSite, setPrevSite] = useState(1);
 
   const siteSelectedByUser = useSelector(
     (state) => state.userStatus.actualSite
@@ -116,12 +117,14 @@ const ShowGalleryBook = () => {
     const actualPhotos = [];
     if (nextPage === 1) {
       if (siteCounter > currentSite + 1) {
-        actualPhotos.push(imageList[1]);
-        actualPhotos.push(imageList[2]);
-        actualPhotos.push(allUrls[currentSite + 1]);
-        Promise.all(actualPhotos).then((urls) => setImageList(urls));
-        setGetActualPhotoIndexInArray(1);
-        console.log("!!!");
+        if (prevSite !== 0) {
+          actualPhotos.push(imageList[1]);
+          actualPhotos.push(imageList[2]);
+          actualPhotos.push(allUrls[currentSite + 1]);
+          Promise.all(actualPhotos).then((urls) => setImageList(urls));
+          setGetActualPhotoIndexInArray(1);
+          console.log("!!!");
+        }
       } else {
         // actualPhotos.push(allUrls[currentSite - 2]);
         actualPhotos.push(imageList[1]);
@@ -145,6 +148,7 @@ const ShowGalleryBook = () => {
         setGetActualPhotoIndexInArray(0);
       }
     }
+    setPrevSite(currentSite);
   }, [currentSite]);
 
   console.log(activeGalleryRef);
