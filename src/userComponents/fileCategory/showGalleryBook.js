@@ -99,6 +99,8 @@ const ShowGalleryBook = () => {
           } else {
             actualPhotos.push(imageUrls[siteSelectedByUser]);
             actualPhotos.push(imageUrls[siteSelectedByUser + 1]);
+            actualPhotos.push(imageUrls[siteSelectedByUser + 2]);
+            setGetActualPhotoIndexInArray(0);
           }
           Promise.all(actualPhotos).then((urls) => setImageList(urls));
         });

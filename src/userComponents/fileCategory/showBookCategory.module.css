@@ -140,10 +140,16 @@
   cursor: no-drop;
 }
 
+.searchInput {
+  margin: 10px;
+}
+
 .inputContainer {
+  margin-top: 12px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
 }
 
 select {

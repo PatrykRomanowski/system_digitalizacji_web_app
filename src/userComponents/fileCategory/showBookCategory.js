@@ -25,8 +25,40 @@ const ShowBookCategory = (props) => {
   const [modalButtonDisabled, setModalButtonDisabled] = useState(true);
   const [pageSelectedByUser, setPageSelectedByUser] = useState(null);
 
+  const [sortTitleValue, setSortTitleValue] = useState("");
+  const [sortAuthorValue, setSortAuthorValue] = useState("");
+
+  const [allSortBooks, setAllSortBooks] = useState([]);
+  const [allItems, setAllItems] = useState([]);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const sortTitleValueHandeler = (event) => {
+    setSortTitleValue(event.target.value);
+  };
+
+  const sortAuthorValueHandler = (event) => {
+    setSortAuthorValue(event.target.value);
+  };
+
+  useEffect(() => {
+    if (sortTitleValue) {
+      const sortFile = allItems.filter((item) => {
+        console.log(item.props.children);
+        if (item.bookTitle) {
+          console.log(item.bookTitle);
+          return item.bookTitle
+            .toLowerCase()
+            .includes(sortTitleValue.toLowerCase());
+        }
+        return false;
+      });
+      setAllSortBooks(sortFile);
+    } else {
+      setAllSortBooks(null);
+    }
+  }, [sortAuthorValue, sortTitleValue]);
 
   const showModalHandler = (props) => {
     setShowModal(true);
@@ -115,25 +147,29 @@ const ShowBookCategory = (props) => {
     fetchData();
   }, [userId]);
 
-  const showAllBooks = allBooks.map((book) => {
-    return (
-      <div
-        onClick={() => showModalHandler(book.itemId)}
-        // onClick={showModalHandler}
-        className={styles.bookContainer}
-        key={book.itemId}
-      >
-        <div className={styles.bookAuthor}>{book.bookAuthor}</div>
-        <div className={styles.bookTitle}>{book.bookTitle}</div>
+  useEffect(() => {
+    const showAllBooks = allBooks.map((book) => {
+      return (
+        <div
+          onClick={() => showModalHandler(book.itemId)}
+          // onClick={showModalHandler}
+          className={styles.bookContainer}
+          key={book.itemId}
+        >
+          <div className={styles.bookAuthor}>{book.bookAuthor}</div>
+          <div className={styles.bookTitle}>{book.bookTitle}</div>
 
-        <img
-          className={styles.titleImage}
-          src={book.bookImage}
-          alt="Obrazek książki"
-        />
-      </div>
-    );
-  });
+          <img
+            className={styles.titleImage}
+            src={book.bookImage}
+            alt="Obrazek książki"
+          />
+        </div>
+      );
+    });
+
+    setAllItems(showAllBooks);
+  }, [allBooks]);
 
   const setShowFileCategory = () => {
     props.setShowFileCategory();
@@ -141,7 +177,29 @@ const ShowBookCategory = (props) => {
 
   return (
     <div className={styles.bookCategoryContainer}>
-      <div className={styles.allBooksContainer}>{showAllBooks}</div>
+      <div className={styles.inputContainer}>
+        <div className={styles.searchInput}>
+          <p>Wyszukaj po tytule</p>
+          <input
+            type="text"
+            value={sortTitleValue}
+            onChange={sortTitleValueHandeler}
+            className={styles.inputModal}
+          />
+        </div>
+        <div className={styles.searchInput}>
+          <p>Wyszukaj po autorze</p>
+          <input
+            type="text"
+            value={sortAuthorValue}
+            onChange={sortAuthorValueHandler}
+            className={styles.inputModal}
+          />
+        </div>
+      </div>
+      <div className={styles.allBooksContainer}>
+        {allSortBooks === null ? allItems : allSortBooks}
+      </div>
       <button className={styles.goBackButton} onClick={setShowFileCategory}>
         WRÓĆ DO WSZYSTKICH KATEGORII
       </button>
