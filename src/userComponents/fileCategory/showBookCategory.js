@@ -15,6 +15,8 @@ import { ref, get } from "firebase/database";
 import { navActions } from "../../storage/nav-context";
 import { userActions } from "../../storage/user-context";
 
+import useSortBooks from "../../hooks/useSortBooks";
+
 import styles from "./showBookCategory.module.css";
 
 const ShowBookCategory = (props) => {
@@ -31,6 +33,8 @@ const ShowBookCategory = (props) => {
   const [allSortBooks, setAllSortBooks] = useState([]);
   const [allItems, setAllItems] = useState([]);
 
+  const sortFileHook = useSortBooks(); // castom hooks
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -43,18 +47,103 @@ const ShowBookCategory = (props) => {
   };
 
   useEffect(() => {
-    if (sortTitleValue) {
-      const sortFile = allItems.filter((item) => {
-        console.log(item.props.children);
-        if (item.bookTitle) {
-          console.log(item.bookTitle);
-          return item.bookTitle
-            .toLowerCase()
-            .includes(sortTitleValue.toLowerCase());
+    if (sortTitleValue && !sortAuthorValue) {
+      sortFileHook.counter();
+      const sortFile = allBooks.map((book) => {
+        console.log(book.itemId);
+        if (
+          book.bookTitle.toLowerCase().includes(sortTitleValue.toLowerCase())
+        ) {
+          console.log(book.bookTitle);
+          return (
+            <div
+              onClick={() => showModalHandler(book.itemId)}
+              // onClick={showModalHandler}
+              className={styles.bookContainer}
+              key={book.itemId}
+            >
+              <div className={styles.bookAuthor}>{book.bookAuthor}</div>
+              <div className={styles.bookTitle}>{book.bookTitle}</div>
+
+              <img
+                className={styles.titleImage}
+                src={book.bookImage}
+                alt="Obrazek książki"
+              />
+            </div>
+          );
         }
         return false;
       });
       setAllSortBooks(sortFile);
+    } else if (sortAuthorValue && !sortTitleValue) {
+      const sortFile = allBooks.map((book) => {
+        console.log(book.itemId);
+        if (
+          book.bookAuthor.toLowerCase().includes(sortAuthorValue.toLowerCase())
+        ) {
+          console.log(book.bookTitle);
+          return (
+            <div
+              onClick={() => showModalHandler(book.itemId)}
+              // onClick={showModalHandler}
+              className={styles.bookContainer}
+              key={book.itemId}
+            >
+              <div className={styles.bookAuthor}>{book.bookAuthor}</div>
+              <div className={styles.bookTitle}>{book.bookTitle}</div>
+
+              <img
+                className={styles.titleImage}
+                src={book.bookImage}
+                alt="Obrazek książki"
+              />
+            </div>
+          );
+        }
+        return false;
+      });
+
+      setAllSortBooks(sortFile);
+    } else if (sortAuthorValue && sortTitleValue) {
+      const sortFile = allBooks.filter((book) => {
+        console.log(book.itemId);
+        if (
+          book.bookAuthor.toLowerCase().includes(sortAuthorValue.toLowerCase())
+        ) {
+          console.log(book.bookTitle);
+          return book;
+        }
+        return false;
+      });
+
+      const additionalSortFile = sortFile.map((book) => {
+        console.log(book.itemId);
+        if (
+          book.bookTitle.toLowerCase().includes(sortTitleValue.toLowerCase())
+        ) {
+          console.log(book.bookAuthor);
+          return (
+            <div
+              onClick={() => showModalHandler(book.itemId)}
+              // onClick={showModalHandler}
+              className={styles.bookContainer}
+              key={book.itemId}
+            >
+              <div className={styles.bookAuthor}>{book.bookAuthor}</div>
+              <div className={styles.bookTitle}>{book.bookTitle}</div>
+
+              <img
+                className={styles.titleImage}
+                src={book.bookImage}
+                alt="Obrazek książki"
+              />
+            </div>
+          );
+        }
+        return false;
+      });
+      setAllSortBooks(additionalSortFile);
     } else {
       setAllSortBooks(null);
     }

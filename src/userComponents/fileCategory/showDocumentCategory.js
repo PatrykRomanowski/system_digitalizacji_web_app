@@ -96,7 +96,7 @@ const ShowDocumentCategory = (props) => {
             items.push({
               itemId: itemKey,
               itemDescription: item.description,
-              itemSize: item.size[0],
+              itemSize: item.size.reduce((acc, current) => acc + current),
               itemKategory: categoryKey,
             });
             console.log(items);

@@ -30,6 +30,10 @@ const RegisterPage = () => {
             isAdmin: false,
             allocatedDiskSpace: 1024,
             diskSpaceUsed: 0,
+            dataCategory: {
+              documents: ["medyczne", "rachunki", "samochodowe"],
+              receipt: ["rtv i agd", "spożywcze", "ubrania"],
+            },
           };
 
           const userId = userData.user.uid; // pobranie identyfikatora zarejestrowanego uzytkownika
@@ -56,27 +60,27 @@ const RegisterPage = () => {
   return (
     <div className={styles.registerContainer}>
       <form className={styles.registerComponent} onSubmit={handleSubmit}>
-        <p className={styles.inputText}>WPISZ LOGIN:</p>
+        <p className={styles.inputText}> WPISZ LOGIN: </p>{" "}
         <input
           className={styles.inputLogin}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-        />
-        <p className={styles.inputText}>WPISZ HASŁO:</p>
+        />{" "}
+        <p className={styles.inputText}> WPISZ HASŁO: </p>{" "}
         <input
           className={styles.inputLogin}
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-        />
+        />{" "}
         <button className={styles.btnRegister} type="submit">
-          Zarejestruj się
-        </button>
-      </form>
+          Zarejestruj się{" "}
+        </button>{" "}
+      </form>{" "}
       <button onClick={goBackHandler} className={styles.btnRegister}>
-        Wróć do logowania
-      </button>
+        Wróć do logowania{" "}
+      </button>{" "}
     </div>
   );
 };

@@ -104,11 +104,11 @@ const AddFileComponent = () => {
   };
 
   const receiptCategoryComponent = reciperCategories.map((item) => {
-    return <option value={item}>{item}</option>;
+    return <option value={item}> {item} </option>;
   });
 
   const docCategoryComponent = docCategories.map((item) => {
-    return <option value={item}>{item}</option>;
+    return <option value={item}> {item} </option>;
   });
 
   const handleOptionChange = (event) => {
@@ -250,9 +250,11 @@ const AddFileComponent = () => {
           `users/${activeIdUser}`
         );
         await update(sendNewDiscSpaceUsedRef, newDiskSpaceUsed);
+        console.log("space Used: " + discSpacesUse);
+        console.log("new disc space: " + newDiskSpaceUsed);
         dispatch(
           userActions.newDiscSpacesUse({
-            value: discSpacesUse + totalSizeInBytes,
+            value: totalSizeInBytes,
           })
         );
       } else {
@@ -277,47 +279,50 @@ const AddFileComponent = () => {
   return (
     <div className={styles.addFileContainer}>
       <div className={styles.selectDocumentType}>
-        <p className={styles.inputDocumentTypeDescription}>Wybierz kategorię</p>
+        <p className={styles.inputDocumentTypeDescription}>
+          {" "}
+          Wybierz kategorię{" "}
+        </p>{" "}
         <select
           className="inputStyle"
           value={selectedOption}
           onChange={handleOptionChange}
         >
-          <option value="">Wybierz...</option>
-          <option value="books">KSIĄŻKI</option>
-          <option value="document">DOKUMENTY</option>
-          <option value="receipt">PARAGONY</option>
-        </select>
+          <option value=""> Wybierz... </option>{" "}
+          <option value="books"> KSIĄŻKI </option>{" "}
+          <option value="document"> DOKUMENTY </option>{" "}
+          <option value="receipt"> PARAGONY </option>{" "}
+        </select>{" "}
       </div>
-
       {selectedOption === "receipt" ? (
         <div className={styles.selectDocumentType}>
           <p className={styles.inputDocumentTypeDescription}>
-            Wybierz podkategorię
-          </p>
+            Wybierz podkategorię{" "}
+          </p>{" "}
           <select onChange={handleSubTitleOptionChange} className="inputStyle">
-            {receiptCategoryComponent}
-          </select>
+            {" "}
+            {receiptCategoryComponent}{" "}
+          </select>{" "}
         </div>
       ) : selectedOption === "document" ? (
         <div className={styles.selectDocumentType}>
           <p className={styles.inputDocumentTypeDescription}>
-            Wybierz podkategorię
-          </p>
+            Wybierz podkategorię{" "}
+          </p>{" "}
           <select onChange={handleSubTitleOptionChange} className="inputStyle">
-            {docCategoryComponent}
-          </select>
+            {" "}
+            {docCategoryComponent}{" "}
+          </select>{" "}
         </div>
       ) : selectedOption === "books" ? (
         <div className={styles.booksInfo}>
           <p className={styles.booksInfoParagraph}>
             Aby poprawnie dodać książkę, nazwa pliku musi odpowiadać konkretnej
             stronie książki + rozszerzenie, plik strony tytułowej powinien mieć
-            nazwę "title" + rozszerzenie
-          </p>
+            nazwę "title" + rozszerzenie{" "}
+          </p>{" "}
         </div>
       ) : null}
-
       <div
         {...getRootProps()}
         className={`dropzone ${isDragActive ? "active" : ""}`}
@@ -333,124 +338,122 @@ const AddFileComponent = () => {
           cursor: "pointer",
         }}
       >
-        <input {...getInputProps()} />
+        <input {...getInputProps()} />{" "}
         {isDragActive ? (
-          <p>Upuść pliki tutaj...</p>
+          <p> Upuść pliki tutaj... </p>
         ) : (
           <div>
             <p className="dropText">
-              Przeciągnij i upuść pliki tutaj lub kliknij, aby wybrać plik
-            </p>
+              Przeciągnij i upuść pliki tutaj lub kliknij, aby wybrać plik{" "}
+            </p>{" "}
             <p className="dropText">
-              Akceptowane typy plików: .jpeg, .jpg, .png
-            </p>
+              Akceptowane typy plików: .jpeg, .jpg, .png{" "}
+            </p>{" "}
           </div>
-        )}
+        )}{" "}
         <ul>
+          {" "}
           {files.map((file, index) => (
-            <li key={index}>{file.name}</li>
-          ))}
-        </ul>
-      </div>
+            <li key={index}> {file.name} </li>
+          ))}{" "}
+        </ul>{" "}
+      </div>{" "}
       <button
         disabled={sendButtonDisabled}
         className={styles.uploadFileButton}
         onClick={openModal}
       >
-        Wyslij
-      </button>
+        Wyslij{" "}
+      </button>{" "}
       {modalOpen && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <span className={styles.close} onClick={closeModal}>
-              &times;
-            </span>
+              & times;{" "}
+            </span>{" "}
             {selectedOption === "books" && (
               <div>
                 <div className={styles.inputContainer}>
-                  <p className={styles.textInfo}>Dodaj opis</p>
+                  <p className={styles.textInfo}> Dodaj opis </p>{" "}
                   <input
                     type="text"
                     value={bookDescription}
                     onChange={booksDescriptionHandler}
                     className={styles.inputModal}
-                  ></input>
-                </div>
+                  ></input>{" "}
+                </div>{" "}
                 <div className={styles.inputContainer}>
-                  <p className={styles.textInfo}>autor</p>
+                  <p className={styles.textInfo}> autor </p>{" "}
                   <input
                     type="text"
                     value={bookAuthor}
                     onChange={booksAuthorHandler}
                     className={styles.inputModal}
-                  ></input>
-                </div>
+                  ></input>{" "}
+                </div>{" "}
                 <div className={styles.inputContainer}>
-                  <p className={styles.textInfo}>tytuł </p>
+                  <p className={styles.textInfo}> tytuł </p>{" "}
                   <input
                     type="text"
                     value={bookTitle}
                     onChange={booksTitleHandler}
                     className={styles.inputModal}
-                  ></input>
-                </div>
+                  ></input>{" "}
+                </div>{" "}
               </div>
             )}
-
             {selectedOption === "document" && (
               <div>
                 <div className={styles.inputContainer}>
-                  <p className={styles.textInfo}>Dodaj opis</p>
+                  <p className={styles.textInfo}> Dodaj opis </p>{" "}
                   <input
                     type="text"
                     value={documentDescription}
                     onChange={documentDescriptionHandler}
                     className={styles.inputModal}
-                  ></input>
-                </div>
+                  ></input>{" "}
+                </div>{" "}
               </div>
             )}
-
             {selectedOption === "receipt" && (
               <div>
                 <div className={styles.inputContainer}>
-                  <p className={styles.textInfo}>Dodaj opis</p>
+                  <p className={styles.textInfo}> Dodaj opis </p>{" "}
                   <input
                     type="text"
                     value={receiptDescription}
                     onChange={receiptDescriptionHandler}
                     className={styles.inputModal}
-                  ></input>
-                </div>
+                  ></input>{" "}
+                </div>{" "}
                 <div className={styles.inputContainer}>
-                  <p className={styles.textInfo}>Wartość</p>
+                  <p className={styles.textInfo}> Wartość </p>{" "}
                   <input
                     type="text"
                     value={receiptValue}
                     onChange={receiptValueHandler}
                     className={styles.inputModal}
-                  ></input>
-                </div>
+                  ></input>{" "}
+                </div>{" "}
               </div>
             )}
-
             <button
               disabled={modalButtonDisabled}
               className={styles.modalButton}
               onClick={uploadFiles}
             >
-              Wyslij
-            </button>
-          </div>
+              Wyslij{" "}
+            </button>{" "}
+          </div>{" "}
         </div>
-      )}
+      )}{" "}
       <div
         className={`${styles.statusBar} ${
           sendIsSuccess ? styles.successStatusBar : styles.errorStatusBar
         } ${statusBarIsActive ? "" : styles.statusBarHidden}`}
       >
-        {sendMessage}
-      </div>
+        {sendMessage}{" "}
+      </div>{" "}
     </div>
   );
 };
