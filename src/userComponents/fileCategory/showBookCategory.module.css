@@ -24,7 +24,7 @@
   display: flex;
   flex-direction: column;
   width: 200px;
-  height: 300px;
+  height: 320px;
   margin: 20px;
   border-radius: 10px;
   cursor: pointer;
@@ -39,12 +39,25 @@
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
+  text-align: center;
   font-family: "Roboto-M";
   color: rgb(76, 71, 71);
+  max-height: 2.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* white-space: nowrap; */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* Określa maksymalną liczbę linii */
 }
 
 .bookAuthor {
   font-size: 10px;
+  margin-top: 8px;
+}
+
+.bookTitle {
+  margin-bottom: 1rem;
 }
 
 .goBackButton {
@@ -63,6 +76,26 @@
 
 .bookContainer:hover {
   transform: scale(1.04);
+}
+
+.icon {
+  width: 15px;
+  height: 15px;
+  background-image: url("../../icons/trash-solid.svg");
+  background-size: cover;
+  margin: 5px;
+  display: flex;
+
+  /* color: var(--gray3); */
+}
+
+.iconContainer {
+  display: flex;
+  flex-grow: 0.1;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--gray3);
+  border-radius: 0px 0px 10px 10px;
 }
 
 /* showBookCategory.module.css */

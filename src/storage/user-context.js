@@ -41,6 +41,9 @@ const userContext = createSlice({
     setActualSiteOfBook(state, action) {
       state.actualSite = action.payload.actual;
     },
+    deleteItem(state, action) {
+      state.discSpacesUse = state.discSpacesUse - action.payload.sizeFiles;
+    },
   },
 });
 

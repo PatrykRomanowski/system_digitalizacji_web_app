@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
+import { myStorage } from "../../firebase";
 import { firebaseRealtime } from "../../firebase";
-import { ref, get } from "firebase/database";
+import { ref, get, remove, update } from "firebase/database";
+
+import { listAll, ref as refStorage, deleteObject } from "firebase/storage";
 
 import { userActions } from "../../storage/user-context";
 import { navActions } from "../../storage/nav-context";
@@ -11,16 +14,19 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./showReceiptCategory.module.css";
 
-import trashIcon from "../../icons/trash-solid.svg";
-
 const ShowReceiptCategory = (props) => {
   const userId = useSelector((state) => state.userStatus.userId);
+  const actualSpaceUsed = useSelector(
+    (state) => state.userStatus.discSpacesUse
+  );
 
   const [allCategory, setAllCategory] = useState([]);
   const [allItem, setAllItem] = useState([{}]);
   const [sortDescriptionValue, setSortDescriptionValue] = useState("");
   const [sortItem, setSortItem] = useState([{}]);
   const [searchCategoryInput, setSearchCategoryInput] = useState();
+  const [filesFromSend, setFilesFromSend] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -74,6 +80,57 @@ const ShowReceiptCategory = (props) => {
     dispatch(navActions.setActualCategory({ actual: actualKategory }));
 
     navigate("/showGallery");
+  };
+
+  const showModalHandler = (item, event) => {
+    event.stopPropagation();
+    setFilesFromSend(item);
+
+    setShowModal(true);
+  };
+
+  const closeModalHandler = () => {
+    setShowModal(false);
+  };
+
+  const deleteItem = async () => {
+    console.log("deleteItem");
+
+    const item = filesFromSend;
+    console.log(item);
+
+    const actualRef = `/users/${userId}/receipt/${item.itemCategory}/${item.itemId}/`;
+    const storageFolderRef = refStorage(myStorage, actualRef);
+    const realtimeDatabaseFolderRef = ref(firebaseRealtime, actualRef);
+    const realTimeDatabaseDiscSpaceUse = ref(
+      firebaseRealtime,
+      `users/${userId}`
+    );
+    const listResult = await listAll(storageFolderRef);
+
+    console.log(storageFolderRef);
+
+    try {
+      const deletePromises = listResult.items.map(async (item) => {
+        await deleteObject(item);
+      });
+      await Promise.all(deletePromises); // usunięcie danych ze storage
+      await remove(realtimeDatabaseFolderRef);
+      const sizeItems = item.itemSize;
+      const newSpaceUsed = { diskSpaceUsed: actualSpaceUsed - item.itemSize };
+
+      console.log(newSpaceUsed);
+
+      await update(realTimeDatabaseDiscSpaceUse, newSpaceUsed); // await deleteObject(storageFolderRef);
+      dispatch(userActions.deleteItem({ sizeFiles: sizeItems }));
+      console.log("Item deleted successfully");
+
+      const updatedItems = allItem.filter((i) => i.itemId !== item.itemId);
+      setAllItem(updatedItems);
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+    setShowModal(false);
   };
 
   useEffect(() => {
@@ -154,7 +211,21 @@ const ShowReceiptCategory = (props) => {
               : ""}
           </div>
         </div>
-        <div></div>
+        <div
+          className={styles.iconContainer}
+          onClick={(event) =>
+            showModalHandler(
+              {
+                itemId: item.itemId,
+                itemCategory: item.itemKategory,
+                itemSize: item.itemSize,
+              },
+              event
+            )
+          }
+        >
+          <div className={styles.icon}></div>
+        </div>
       </div>
     );
   });
@@ -187,6 +258,21 @@ const ShowReceiptCategory = (props) => {
               ? `${item.itemSize.toFixed(3)} MB`
               : ""}
           </div>
+        </div>
+        <div
+          className={styles.iconContainer}
+          onClick={(event) =>
+            showModalHandler(
+              {
+                itemId: item.itemId,
+                itemCategory: item.itemKategory,
+                itemSize: item.itemSize,
+              },
+              event
+            )
+          }
+        >
+          <div className={styles.icon}></div>
         </div>
       </div>
     );
@@ -224,6 +310,27 @@ const ShowReceiptCategory = (props) => {
           : showAllItem}
       </div>
       {/* <div className={styles.itemsContainer}></div> */}
+
+      {showModal && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <div className={styles.modalHeader}>
+              <h2>Czy napewno chcesz usunąć plik</h2>
+            </div>
+            <div className={styles.buttonsContainer}>
+              <div className={styles.buttonInsideModal} onClick={deleteItem}>
+                TAK
+              </div>
+              <div
+                className={styles.buttonInsideModal}
+                onClick={closeModalHandler}
+              >
+                NIE
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <button className={styles.goBackButton} onClick={setShowFileCategory}>
         WRÓĆ DO WSZYSTKICH KATEGORII

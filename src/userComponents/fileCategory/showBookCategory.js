@@ -24,8 +24,10 @@ const ShowBookCategory = (props) => {
 
   const [allBooks, setAllBooks] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showModalforDeleteItem, setShowModalForDeleteItem] = useState(false);
   const [modalButtonDisabled, setModalButtonDisabled] = useState(true);
   const [pageSelectedByUser, setPageSelectedByUser] = useState(null);
+  const [filesFromSend, setFilesFromSend] = useState(false);
 
   const [sortTitleValue, setSortTitleValue] = useState("");
   const [sortAuthorValue, setSortAuthorValue] = useState("");
@@ -149,7 +151,20 @@ const ShowBookCategory = (props) => {
     }
   }, [sortAuthorValue, sortTitleValue]);
 
-  const showModalHandler = (props) => {
+  const showModalHandlerForDeleteItem = (item, event) => {
+    event.stopPropagation();
+    setFilesFromSend(item);
+
+    setShowModalForDeleteItem(true);
+  };
+
+  const deleteItem = () => {
+    setShowModalForDeleteItem(false);
+  };
+
+  const showModalHandler = (props, event) => {
+    // event.stopPropagation();
+
     setShowModal(true);
     const actualRef = `/users/${userId}/books/${props}`;
     const actualCategory = "bookCategory";
@@ -240,7 +255,7 @@ const ShowBookCategory = (props) => {
     const showAllBooks = allBooks.map((book) => {
       return (
         <div
-          onClick={() => showModalHandler(book.itemId)}
+          onClick={(event) => showModalHandler(book.itemId, event)}
           // onClick={showModalHandler}
           className={styles.bookContainer}
           key={book.itemId}
@@ -253,6 +268,20 @@ const ShowBookCategory = (props) => {
             src={book.bookImage}
             alt="Obrazek książki"
           />
+          <div
+            className={styles.iconContainer}
+            onClick={(event) =>
+              showModalHandlerForDeleteItem(
+                {
+                  itemId: book.itemId,
+                  itemSize: book.itemSize,
+                },
+                event
+              )
+            }
+          >
+            <div className={styles.icon}></div>
+          </div>
         </div>
       );
     });
@@ -289,6 +318,23 @@ const ShowBookCategory = (props) => {
       <div className={styles.allBooksContainer}>
         {allSortBooks === null ? allItems : allSortBooks}
       </div>
+
+      {showModalforDeleteItem && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <div className={styles.modalHeader}>
+              <h2>Wylogowano pomyślnie</h2>
+            </div>
+            <div className={styles.modalBody}>
+              <div>Zostałeś wylogowany.</div>
+            </div>
+            <span className={styles.close} onClick={deleteItem}>
+              OK
+            </span>
+          </div>
+        </div>
+      )}
+
       <button className={styles.goBackButton} onClick={setShowFileCategory}>
         WRÓĆ DO WSZYSTKICH KATEGORII
       </button>
