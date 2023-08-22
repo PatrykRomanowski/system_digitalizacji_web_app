@@ -15,6 +15,7 @@
   display: flex;
   width: 90vw;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   margin-top: 30px;
@@ -115,6 +116,8 @@
 .modalContent {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
@@ -201,4 +204,37 @@ select {
 
 select:enabled {
   border: 1px solid #007bff;
+}
+.buttonsContainer {
+  display: flex;
+}
+
+.buttonInsideModal {
+  margin: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #fefefe;
+  margin-top: 20px;
+  transition: linear 0.2s;
+  background-color: #2196f3;
+  width: 150px;
+  border-radius: 5px;
+  text-align: center;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #444;
 }

@@ -7,10 +7,11 @@ import {
   ref as refStorage,
   getDownloadURL,
   getStorage,
+  deleteObject,
 } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 
-import { ref, get } from "firebase/database";
+import { ref, get, remove, update } from "firebase/database";
 
 import { navActions } from "../../storage/nav-context";
 import { userActions } from "../../storage/user-context";
@@ -21,6 +22,9 @@ import styles from "./showBookCategory.module.css";
 
 const ShowBookCategory = (props) => {
   const userId = useSelector((state) => state.userStatus.userId);
+  const actualSpaceUsed = useSelector(
+    (state) => state.userStatus.discSpacesUse
+  );
 
   const [allBooks, setAllBooks] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -72,6 +76,20 @@ const ShowBookCategory = (props) => {
                 src={book.bookImage}
                 alt="Obrazek książki"
               />
+              <div
+                className={styles.iconContainer}
+                onClick={(event) =>
+                  showModalHandlerForDeleteItem(
+                    {
+                      itemId: book.itemId,
+                      itemSize: book.bookSize,
+                    },
+                    event
+                  )
+                }
+              >
+                <div className={styles.icon}></div>
+              </div>
             </div>
           );
         }
@@ -100,6 +118,20 @@ const ShowBookCategory = (props) => {
                 src={book.bookImage}
                 alt="Obrazek książki"
               />
+              <div
+                className={styles.iconContainer}
+                onClick={(event) =>
+                  showModalHandlerForDeleteItem(
+                    {
+                      itemId: book.itemId,
+                      itemSize: book.bookSize,
+                    },
+                    event
+                  )
+                }
+              >
+                <div className={styles.icon}></div>
+              </div>
             </div>
           );
         }
@@ -140,6 +172,20 @@ const ShowBookCategory = (props) => {
                 src={book.bookImage}
                 alt="Obrazek książki"
               />
+              <div
+                className={styles.iconContainer}
+                onClick={(event) =>
+                  showModalHandlerForDeleteItem(
+                    {
+                      itemId: book.itemId,
+                      itemSize: book.bookSize,
+                    },
+                    event
+                  )
+                }
+              >
+                <div className={styles.icon}></div>
+              </div>
             </div>
           );
         }
@@ -153,12 +199,50 @@ const ShowBookCategory = (props) => {
 
   const showModalHandlerForDeleteItem = (item, event) => {
     event.stopPropagation();
-    setFilesFromSend(item);
 
+    console.log(item);
+
+    setFilesFromSend(item);
     setShowModalForDeleteItem(true);
   };
 
-  const deleteItem = () => {
+  const deleteItem = async () => {
+    const item = filesFromSend;
+    console.log(item);
+
+    const actualRef = `/users/${userId}/books/${item.itemId}/`;
+    const storageFolderRef = refStorage(myStorage, actualRef);
+    const realtimeDatabaseFolderRef = ref(firebaseRealtime, actualRef);
+    const realTimeDatabaseDiscSpaceUse = ref(
+      firebaseRealtime,
+      `users/${userId}`
+    );
+
+    const listResult = await listAll(storageFolderRef);
+
+    try {
+      const deletePromises = listResult.items.map(async (item) => {
+        await deleteObject(item);
+      });
+      await Promise.all(deletePromises); // usunięcie danych ze storage
+      await remove(realtimeDatabaseFolderRef);
+      const sizeItems = item.itemSize;
+      const newSpaceUsed = { diskSpaceUsed: actualSpaceUsed - item.itemSize };
+
+      await update(realTimeDatabaseDiscSpaceUse, newSpaceUsed); // await deleteObject(storageFolderRef);
+      dispatch(userActions.deleteItem({ sizeFiles: sizeItems }));
+      console.log("Item deleted successfully");
+
+      const updatedItems = allItems.filter((i) => i.itemId !== item.itemId);
+      setAllItems(updatedItems);
+    } catch (err) {
+      console.error("Error deleting item:", err);
+    }
+
+    setShowModalForDeleteItem(false);
+  };
+
+  const closeModalHandler = () => {
     setShowModalForDeleteItem(false);
   };
 
@@ -230,7 +314,7 @@ const ShowBookCategory = (props) => {
                 bookAuthor: book.author,
                 bookTitle: book.title,
                 bookDescription: book.description,
-                bookSize: book.size,
+                bookSize: book.size.reduce((acc, current) => acc + current),
                 bookImage: url,
               });
             } catch (error) {
@@ -253,6 +337,7 @@ const ShowBookCategory = (props) => {
 
   useEffect(() => {
     const showAllBooks = allBooks.map((book) => {
+      // console.log(book);
       return (
         <div
           onClick={(event) => showModalHandler(book.itemId, event)}
@@ -262,6 +347,7 @@ const ShowBookCategory = (props) => {
         >
           <div className={styles.bookAuthor}>{book.bookAuthor}</div>
           <div className={styles.bookTitle}>{book.bookTitle}</div>
+          {/* <div className={styles.bookTitle}>{book.bookSize}</div> */}
 
           <img
             className={styles.titleImage}
@@ -274,7 +360,7 @@ const ShowBookCategory = (props) => {
               showModalHandlerForDeleteItem(
                 {
                   itemId: book.itemId,
-                  itemSize: book.itemSize,
+                  itemSize: book.bookSize,
                 },
                 event
               )
@@ -323,14 +409,19 @@ const ShowBookCategory = (props) => {
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <div className={styles.modalHeader}>
-              <h2>Wylogowano pomyślnie</h2>
+              <h2>Czy napewno chcesz usunąć plik</h2>
             </div>
-            <div className={styles.modalBody}>
-              <div>Zostałeś wylogowany.</div>
+            <div className={styles.buttonsContainer}>
+              <div className={styles.buttonInsideModal} onClick={deleteItem}>
+                TAK
+              </div>
+              <div
+                className={styles.buttonInsideModal}
+                onClick={closeModalHandler}
+              >
+                NIE
+              </div>
             </div>
-            <span className={styles.close} onClick={deleteItem}>
-              OK
-            </span>
           </div>
         </div>
       )}
