@@ -29,6 +29,20 @@ const MainPageAdmin = () => {
 
         console.log(data);
 
+        const arrayWithData = [];
+
+        for (const itemKey in data) {
+          arrayWithData.push({
+            itemId: itemKey,
+            allocatedDiskSpace: data[itemKey].allocatedDiskSpace,
+            diskSpaceUsed: data[itemKey].diskSpaceUsed,
+            email: data[itemKey].email,
+            isAdmin: data[itemKey].isAdmin,
+          });
+        }
+
+        dispatch(adminActions.addUser({ value: arrayWithData }));
+
         for (const oneValue in data) {
           console.log(data[oneValue].diskSpaceUsed);
           dispatch(

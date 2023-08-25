@@ -1,4 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {
+  createSlice
+} from "@reduxjs/toolkit";
 
 const adminContext = createSlice({
   name: "adminInfo",
@@ -6,7 +8,7 @@ const adminContext = createSlice({
   initialState: {
     allDiscSpaceUse: 0,
     allAllocatedSpace: 0,
-    allUsers: [],
+    allUsers: null,
   },
   reducers: {
     addValue(state, action) {
