@@ -1,0 +1,41 @@
+.settingUserContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+}
+
+.settingUserDescription,
+.descriptionWithButton {
+  text-transform: uppercase;
+  font-family: "Roboto";
+}
+
+.setingUserDataValueText {
+  text-transform: uppercase;
+  font-family: "Roboto";
+  margin: 20px;
+  font-size: 28px;
+  color: brown;
+}
+
+.descriptionWithButton {
+  display: flex;
+  justify-content: center;
+  font-size: 10px;
+}
+
+.button {
+  text-transform: uppercase;
+  font-family: "Roboto";
+  margin-left: 5px;
+  color: rgb(48, 19, 178);
+  font-size: 12px;
+  transition: ease-in-out, 0.12s;
+  cursor: pointer;
+}
+
+.button:hover {
+  font-size: 14px;
+}

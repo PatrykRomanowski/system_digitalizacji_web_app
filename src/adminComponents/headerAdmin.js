@@ -4,20 +4,47 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./headerAdmin.module.css";
 
-const HeaderUser = () => {
+const HeaderUser = ({ onClickNav }) => {
   const navigate = useNavigate();
 
   const logoutHandler = () => {
     navigate("/logoutAdmin");
   };
 
+  const onClickNavHandler = (data) => {
+    if (onClickNav) {
+      onClickNav(data);
+    }
+  };
+
   return (
     <div className={styles.headerContainer}>
       <div className={styles.headerText}>Admin Panel</div>
       <div className={styles.navContainer}>
-        <button className={styles.navButton}>Przeglądaj Użytkowników</button>
-        <button className={styles.navButton}>Usuń Użytkowników</button>
-        <button className={styles.navButton}>Ustawienia</button>
+        <button
+          onClick={() => {
+            onClickNavHandler("showUser");
+          }}
+          className={styles.navButton}
+        >
+          Przeglądaj Użytkowników
+        </button>
+        <button
+          onClick={() => {
+            onClickNavHandler("deleteUser");
+          }}
+          className={styles.navButton}
+        >
+          Usuń Użytkowników
+        </button>
+        <button
+          onClick={() => {
+            onClickNavHandler("showSetting");
+          }}
+          className={styles.navButton}
+        >
+          Ustawienia
+        </button>
       </div>
       <button onClick={logoutHandler} className={styles.logoutButton}>
         Wyloguj

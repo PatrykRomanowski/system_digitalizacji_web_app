@@ -28,6 +28,36 @@
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
+.statusBar {
+  display: flex;
+  width: 350px;
+  height: 80px;
+  border-radius: 5px;
+  position: fixed;
+  bottom: 10px;
+  left: 20px;
+  color: #fefefe;
+  font-family: "Changa One";
+  text-align: center;
+  font-size: 22px;
+  align-items: center;
+  justify-content: center;
+  transition: 0.5s ease;
+}
+
+.statusBarHidden {
+  bottom: -80px;
+  transition: 1.5s ease;
+}
+
+.errorStatusBar {
+  background-color: red;
+}
+
+.successStatusBar {
+  background-color: greenyellow;
+}
+
 .modal-header {
   display: flex;
   justify-content: space-between;

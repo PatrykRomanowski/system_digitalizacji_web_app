@@ -32,6 +32,8 @@ const ShowBookCategory = (props) => {
   const [modalButtonDisabled, setModalButtonDisabled] = useState(true);
   const [pageSelectedByUser, setPageSelectedByUser] = useState(null);
   const [filesFromSend, setFilesFromSend] = useState(false);
+  const [actualRefForStorage, setActualRefForStorage] = useState("");
+  const [siteCounter, setSiteCounter] = useState(null);
 
   const [sortTitleValue, setSortTitleValue] = useState("");
   const [sortAuthorValue, setSortAuthorValue] = useState("");
@@ -251,9 +253,26 @@ const ShowBookCategory = (props) => {
 
     setShowModal(true);
     const actualRef = `/users/${userId}/books/${props}`;
+    setActualRefForStorage(actualRef);
     const actualCategory = "bookCategory";
     dispatch(navActions.setActualCategory({ actual: actualCategory }));
     dispatch(userActions.setActualGalleryRef({ xd: actualRef }));
+
+    const storageRef = refStorage(myStorage, actualRef);
+    listAll(storageRef).then((res) => {
+      const imageUrls = res.items.map((item) =>
+        getDownloadURL(item).then((url) => ({
+          original: url,
+          thumbnail: url,
+          originalClass: "showPhoto",
+          thumbnailClass: "showPhoto-thumbnail",
+        }))
+      );
+
+      const imageLength = imageUrls.length;
+      setSiteCounter(imageLength - 1);
+      console.log(imageLength);
+    });
   };
 
   const closeModal = () => {
@@ -279,8 +298,16 @@ const ShowBookCategory = (props) => {
     const value = event.target.value;
     const numberValue = parseInt(value);
 
-    setPageSelectedByUser(numberValue);
-    buttonDisabledHandler(numberValue);
+    if (numberValue >= siteCounter) {
+      setPageSelectedByUser(siteCounter);
+      buttonDisabledHandler(numberValue);
+    } else if (numberValue <= 0) {
+      setPageSelectedByUser(0);
+      buttonDisabledHandler(false);
+    } else {
+      setPageSelectedByUser(numberValue);
+      buttonDisabledHandler(numberValue);
+    }
   };
 
   useEffect(() => {
@@ -435,7 +462,7 @@ const ShowBookCategory = (props) => {
             <span className={styles.close} onClick={closeModal}>
               &times;
             </span>
-            <div className={styles.inputContainer}>
+            <div className={styles.inputContainerForModal}>
               <p className={styles.textInfo}>
                 WYBIERZ STRONĘ OD KTÓREJ CHCESZ ZACZĄĆ
               </p>
