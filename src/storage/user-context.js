@@ -1,4 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {
+  createSlice
+} from "@reduxjs/toolkit";
 
 const userContext = createSlice({
   name: "userInfo",
@@ -12,6 +14,7 @@ const userContext = createSlice({
     discSpacesUse: 0,
     allocatedDiscSpace: 0,
     actualGalleryRef: "",
+    isActive: null,
   },
   reducers: {
     login(state, action) {
@@ -22,6 +25,7 @@ const userContext = createSlice({
       state.userEmail = "";
       state.userId = "";
     },
+
     addDocCategories(state, action) {
       state.docCategories = action.payload.value;
     },
@@ -31,6 +35,7 @@ const userContext = createSlice({
     addAdditionalInfoAboutUser(state, action) {
       state.discSpacesUse = action.payload.discSpacesUse;
       state.allocatedDiscSpace = action.payload.allocatedDiskSpace;
+      state.isActive = action.payload.isActive;
     },
     newDiscSpacesUse(state, action) {
       state.discSpacesUse = state.discSpacesUse + action.payload.value;

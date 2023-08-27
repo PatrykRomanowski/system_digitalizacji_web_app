@@ -38,6 +38,7 @@ const MainPageAdmin = () => {
             diskSpaceUsed: data[itemKey].diskSpaceUsed,
             email: data[itemKey].email,
             isAdmin: data[itemKey].isAdmin,
+            isActive: data[itemKey].isActive,
           });
         }
 

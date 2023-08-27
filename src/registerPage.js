@@ -49,6 +49,7 @@ const RegisterPage = () => {
               receipt: ["rtv i agd", "spożywcze", "ubrania"],
             },
             email: email,
+            isActive: true,
           };
 
           const userId = userData.user.uid; // pobranie identyfikatora zarejestrowanego uzytkownika

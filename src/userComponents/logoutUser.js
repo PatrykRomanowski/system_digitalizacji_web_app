@@ -30,9 +30,6 @@ const LogoutUser = () => {
       {logoutResult === "success" && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
-            <div className={styles.modalHeader}>
-              <h2>Wylogowano pomyślnie</h2>
-            </div>
             <div className={styles.modalBody}>
               <div>Zostałeś wylogowany.</div>
             </div>

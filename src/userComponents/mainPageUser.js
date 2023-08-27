@@ -12,14 +12,24 @@ import ShowReceiptCategory from "./fileCategory/showReceiptCategory";
 import ShowDocumentCategory from "./fileCategory/showDocumentCategory";
 import ShowBookCategory from "./fileCategory/showBookCategory";
 
+import styles from "./mainPageUser.module.css";
+
 const MainPageUser = () => {
   const [actualPage, setActualPage] = useState(
     useSelector((state) => state.navStatus.actualCategory)
   );
+
+  const userIsActive = useSelector((state) => state.userStatus.isActive);
   const navigate = useNavigate();
+
+  const goToLogout = () => {
+    console.log("logout");
+    navigate("/logoutUser");
+  };
 
   const onClickNav = (data) => {
     console.log(data);
+    console.log(userIsActive);
     if (data === "addFile") {
       setActualPage("addFile");
     } else if (data === "showFile") {
@@ -39,6 +49,7 @@ const MainPageUser = () => {
 
   const setShowFileCategoryHandler = (props) => {
     setActualPage("showFile");
+    console.log(userIsActive);
   };
 
   let pageComponent;
@@ -67,6 +78,20 @@ const MainPageUser = () => {
     <div>
       <HeaderUser onClickNav={onClickNav} logoutHandler={logoutHandler} />
       <div>{pageComponent}</div>
+      {!userIsActive ? (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <p className={styles.textInfo}>
+              Twoje konto jest zablokowane, a dane usunięte. <br /> Skontaktuj
+              się z obsługą serwisu
+            </p>
+
+            <button className={styles.modalButton} onClick={() => goToLogout()}>
+              OK{" "}
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

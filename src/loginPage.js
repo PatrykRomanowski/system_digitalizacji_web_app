@@ -52,15 +52,18 @@ const LoginPage = () => {
               const diskSpacesUsePromise = get(
                 child(userRef, "/diskSpaceUsed")
               );
+              const userIsActivePromise = get(child(userRef, "/isActive"));
 
               Promise.all([
                 allocatedDiscSpacePromise,
                 diskSpacesUsePromise,
+                userIsActivePromise,
               ]).then((snapshots) => {
                 dispatch(
                   userActions.addAdditionalInfoAboutUser({
                     allocatedDiskSpace: snapshots[0].val(),
                     discSpacesUse: snapshots[1].val(),
+                    isActive: snapshots[2].val(),
                   })
                 );
               });

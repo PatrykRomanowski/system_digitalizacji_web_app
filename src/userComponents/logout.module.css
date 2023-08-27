@@ -48,21 +48,19 @@
 }
 
 .close {
-  font-size: 28px;
-  font-weight: bold;
-  color: #fefefe;
   margin-top: 20px;
-  transition: linear 0.2s;
-  background-color: var(--primary-color1);
-  width: 150px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
   border-radius: 5px;
-  text-align: center;
-  padding: 4px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .close:hover,
 .close:focus {
   text-decoration: none;
   cursor: pointer;
-  background-color: var(--primary-color3);
+  background-color: #0069d9;
 }
