@@ -12,6 +12,7 @@ import {
 } from 'firebase/database';
 
 
+
 // import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -25,8 +26,20 @@ const firebaseConfig = {
   measurementId: process.env.Raect_App_measurementId,
 };
 
+// const adminConfig = {
+//   credential: admin.credential.cert({
+//     projectId: 'systemdigitalizacji',
+//     clientEmail: 'firebase-adminsdk-o25s4@systemdigitalizacji.iam.gserviceaccount.com',
+//     privateKey: process.env.React_App_privateKey,
+//   }),
+//   databaseURL: "https://systemdigitalizacji-default-rtdb.europe-west1.firebasedatabase.app"
+// };
+
+// export const adminApp = admin.initializeApp(adminConfig);
+
 export const app = initializeApp(firebaseConfig);
 
 export const myStorage = getStorage(app);
 export const auth2 = getAuth(app);
+
 export const firebaseRealtime = getDatabase(app);
