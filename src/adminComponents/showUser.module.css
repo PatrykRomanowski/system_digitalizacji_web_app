@@ -107,6 +107,15 @@ p {
   font-family: "Roboto-M";
 }
 
+.dataContainer {
+  display: flex;
+  margin: 0;
+}
+.buttonChangeAllocatedSpace {
+  color: #0069d9;
+  cursor: pointer;
+}
+
 .modalContent {
   display: flex;
   flex-direction: column;
@@ -122,13 +131,18 @@ p {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
+.h2Modal {
+  text-align: center;
+}
+
 .modalHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  align-items: center;
   text-transform: uppercase;
   font-size: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .modal-header h2 {
@@ -142,4 +156,41 @@ p {
   color: #555;
   font-size: 1.2rem;
   line-height: 1.5;
+}
+.modalButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.modalButton:hover {
+  background-color: #0069d9;
+}
+
+.modalButton:disabled {
+  background-color: #888;
+  cursor: no-drop;
+}
+.textInfo,
+.dataText {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.dataText {
+  margin-left: 10px;
+  color: red;
+}
+
+.inputContainerForModal {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }

@@ -16,8 +16,138 @@ const ShowUser = () => {
   const [sortUserNameValue, setSortUserNameValeu] = useState();
   const [showModal, setShowModal] = useState(false);
   const [showModalForDeleteItem, setShowModalForDeleteItem] = useState(false);
+  const [userInfoItem, setUserInfoItem] = useState();
+  const [additionalModalComponent, setAdditionalModal] = useState(null);
+  const [sliderValue, setSliderValue] = useState(1024);
 
-  const showModalHandler = () => {
+  const handleSliderChange = (event) => {
+    const newValue = parseInt(event.target.value);
+    setSliderValue(newValue);
+  };
+
+  useEffect(() => {
+    console.log("XD");
+    const setAdditionalModal2 = (
+      <div className={styles.modal}>
+        <div className={styles.modalContent}>
+          <div className={styles.modalHeader}>
+            <h2 className={styles.h2Modal}>
+              Wybierz ilość danych przydzielonych użytkownikowi
+            </h2>
+          </div>
+          <input
+            type="range"
+            value={sliderValue}
+            min={1024}
+            max={8192}
+            step={1024}
+            onChange={handleSliderChange}
+            className={styles.slider}
+          />
+          <p>{sliderValue}</p>
+          <div className={styles.buttonsContainer}>
+            <div className={styles.modalButton} onClick={closeModalHandler2}>
+              OK
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    setAdditionalModal(setAdditionalModal2);
+  }, [sliderValue]);
+
+  const additionalModal = () => {
+    console.log("XD");
+    const setAdditionalModal2 = (
+      <div className={styles.modal}>
+        <div className={styles.modalContent}>
+          <div className={styles.modalHeader}>
+            <h2 className={styles.h2Modal}>
+              Wybierz ilość danych przydzielonych użytkownikowi
+            </h2>
+          </div>
+          <input
+            type="range"
+            value={sliderValue}
+            min={1024}
+            max={8192}
+            onChange={handleSliderChange}
+            className={styles.slider}
+          />
+          <div className={styles.buttonsContainer}>
+            <div className={styles.modalButton} onClick={closeModalHandler2}>
+              OK
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    setAdditionalModal(setAdditionalModal2);
+  };
+
+  const closeModalHandler2 = () => {
+    setAdditionalModal(null);
+  };
+
+  const showModalHandler = (props) => {
+    console.log(props);
+
+    const userInfoItem = (
+      <div className={styles.modal}>
+        <div className={styles.modalContent}>
+          <div className={styles.modalHeader}>
+            <h2>Dane użytkownika {props.email}</h2>
+          </div>
+          <div className={styles.infoContainer}>
+            <div className={styles.dataContainer}>
+              <p className={styles.textInfo}>Id użytkownika: </p>
+              <p className={styles.dataText}>{props.itemId}</p>
+            </div>
+            <div className={styles.dataContainer}>
+              <p className={styles.textInfo}>Przestrzeń zarezerwowana: </p>
+              <p className={styles.dataText}>{props.allocatedDiskSpace} MB</p>
+            </div>
+            <div className={styles.dataContainer}>
+              <p className={styles.textInfo}>Przestrzeń użyta: </p>
+              <p className={styles.dataText}>
+                {props.diskSpaceUsed.toFixed(3)} MB
+              </p>
+            </div>
+
+            <div className={styles.dataContainer}>
+              <p className={styles.textInfo}>Użytkownik jest adminem: </p>
+              <p className={styles.dataText}>{props.isAdmin ? "NIE" : "TAK"}</p>
+            </div>
+            <div className={styles.dataContainer}>
+              <p className={styles.textInfo}>Użytkownik jest zablokowany:</p>
+              <p className={styles.dataText}>
+                {props.isActive ? "NIE" : "TAK"}
+              </p>
+            </div>
+            <div className={styles.dataContainer}>
+              <p className={styles.textInfo}>
+                Aby zwiększyć dane{" "}
+                <p
+                  onClick={additionalModal}
+                  className={styles.buttonChangeAllocatedSpace}
+                >
+                  Kliknij tu
+                </p>
+              </p>
+            </div>
+          </div>
+          <div className={styles.buttonsContainer}>
+            <div className={styles.modalButton} onClick={closeModalHandler}>
+              OK
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    setUserInfoItem(userInfoItem);
     // event.stopPropagation();
 
     setShowModal(true);
@@ -97,7 +227,7 @@ const ShowUser = () => {
       if (user.isActive) {
         return (
           <div
-            onClick={() => showModalHandler()}
+            onClick={() => showModalHandler(user)}
             className={styles.itemContainer}
           >
             <div style={{ flex: "6" }}>
@@ -166,26 +296,8 @@ const ShowUser = () => {
         </div>
       </div>
       <div className={styles.itemsContainer}>{allBarsWithUsers}</div>
-      {showModal && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <div className={styles.modalHeader}>
-              <h2>Czy napewno chcesz usunąć plik</h2>
-            </div>
-            <div className={styles.buttonsContainer}>
-              <div className={styles.buttonInsideModal} onClick={deleteItem}>
-                TAK
-              </div>
-              <div
-                className={styles.buttonInsideModal}
-                onClick={closeModalHandler}
-              >
-                NIE
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {showModal ? userInfoItem : null}
+      {additionalModalComponent}
     </div>
   );
 };
