@@ -13,7 +13,6 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [sendMessage, setSendMessage] = useState("");
   const [sendIsSuccess, setSendIsSuccess] = useState(false);
-
   const [statusBarIsActive, setStatusBarIsActive] = useState();
 
   // const [registerResult, setRegisterResult] = useState(null);
@@ -67,7 +66,9 @@ const RegisterPage = () => {
             });
         }
       );
-      navigate("/login");
+      setTimeout(() => {
+        navigate("/login");
+      }, 4000); // Odczekaj 4000ms (4 sekundy) przed nawigacją do "/login"
 
       console.log("Rejestracja powiodła się");
 

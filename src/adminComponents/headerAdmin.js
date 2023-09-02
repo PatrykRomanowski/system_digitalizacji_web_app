@@ -19,7 +19,7 @@ const HeaderUser = ({ onClickNav }) => {
 
   return (
     <div className={styles.headerContainer}>
-      <div className={styles.headerText}>Admin Panel</div>
+      <div className={styles.headerText}> Admin Panel </div>{" "}
       <div className={styles.navContainer}>
         <button
           onClick={() => {
@@ -27,15 +27,7 @@ const HeaderUser = ({ onClickNav }) => {
           }}
           className={styles.navButton}
         >
-          Przeglądaj Użytkowników
-        </button>
-        <button
-          onClick={() => {
-            onClickNavHandler("deleteUser");
-          }}
-          className={styles.navButton}
-        >
-          Usuń Użytkowników
+          Zarządzanie Użytkownikami{" "}
         </button>
         <button
           onClick={() => {
@@ -43,12 +35,12 @@ const HeaderUser = ({ onClickNav }) => {
           }}
           className={styles.navButton}
         >
-          Ustawienia
-        </button>
-      </div>
+          Wykorzystanie danych{" "}
+        </button>{" "}
+      </div>{" "}
       <button onClick={logoutHandler} className={styles.logoutButton}>
-        Wyloguj
-      </button>
+        Wyloguj{" "}
+      </button>{" "}
     </div>
   );
 };
