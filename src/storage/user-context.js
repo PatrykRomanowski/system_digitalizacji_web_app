@@ -49,6 +49,7 @@ const userContext = createSlice({
     deleteItem(state, action) {
       state.discSpacesUse = state.discSpacesUse - action.payload.sizeFiles;
     },
+
   },
 });
 
