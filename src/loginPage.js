@@ -7,7 +7,6 @@ import { auth2 } from "./firebase";
 import { firebaseRealtime } from "./firebase";
 
 import { userActions } from "./storage/user-context";
-
 import { useNavigate } from "react-router-dom";
 
 import styles from "./loginPage.module.css";
@@ -100,6 +99,7 @@ const LoginPage = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          data-testid="email-input"
         />
         <p className={styles.inputText}>WPISZ HASŁO:</p>
         <input
@@ -107,9 +107,10 @@ const LoginPage = () => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          data-testid="password-input"
         />
         <button className={styles.btnLogin} type="submit">
-          Zaloguj się
+          Zaloguj
         </button>
       </form>
       <p className={styles.registerInfo}>
@@ -117,11 +118,16 @@ const LoginPage = () => {
         <span
           className={styles.goToRegisterPage}
           onClick={goToRegisterPageHandler}
+          data-testid="button-register"
         >
           Zarejestruj się
         </span>
       </p>
-      <button onClick={goBackHandler} className={styles.btnLogin}>
+      <button
+        onClick={goBackHandler}
+        data-testid="button-back"
+        className={styles.btnLogin}
+      >
         Wróć do strony głównej
       </button>
     </div>

@@ -6,7 +6,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/user-event": "^14.5.1",
     "env-cmd": "^10.1.0",
     "firebase": "^9.23.0",
     "firebase-admin": "^11.10.1",
@@ -24,7 +24,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "coverage": "react-scripts test --coverage --watchAll --collectCoverageFrom='src/.{js,tsx}' "
   },
   "eslintConfig": {
     "extends": [
