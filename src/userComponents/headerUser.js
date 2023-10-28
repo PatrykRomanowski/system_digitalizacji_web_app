@@ -21,6 +21,7 @@ const HeaderUser = ({ onClickNav }) => {
       <div className={styles.headerText}>User Panel</div>
       <div className={styles.navContainer}>
         <button
+          data-testid="button-addFiles"
           onClick={() => {
             onClickNavHandler("addFile");
           }}
@@ -37,6 +38,7 @@ const HeaderUser = ({ onClickNav }) => {
           Przeglądaj pliki
         </button>
         <button
+          data-testid="button-setting"
           onClick={() => {
             onClickNavHandler("showSettings");
           }}
